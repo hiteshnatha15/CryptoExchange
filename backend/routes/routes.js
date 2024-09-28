@@ -15,6 +15,7 @@ const {
   checkBankDetails,
   addBankAccount,
   getUserDetails,
+  getDeposits
 } = require("../controllers/userController"); // Import your new controller
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
@@ -31,6 +32,7 @@ router.post("/api/delete-transaction", auth, deleteTransaction);
 router.get("/api/checkBankDetails", auth, checkBankDetails); // Check bank details
 router.post("/api/addBankAccount", auth, addBankAccount); // Add bank account
 router.get("/api/getUserDetails", auth, getUserDetails); // Get user details
+router.get("/api/getDeposits", auth, getDeposits); // Get deposits
 
 // OTP Routes (These routes do not require authentication)
 router.post("/api/otp/send-otp", sendOtp);

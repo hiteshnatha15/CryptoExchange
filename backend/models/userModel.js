@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
       type: Number,
       default: 0, // Default balance for TRC-20
     },
+    processing: {
+      type: Number,
+      default: 0, // Default processing balance
+    },
   },
 });
 

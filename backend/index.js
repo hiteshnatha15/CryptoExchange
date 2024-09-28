@@ -3,6 +3,13 @@ require("dotenv").config();
 const routes = require("./routes/routes"); // Import routes
 const db = require("./configs/db");
 const cors = require("cors");
+const cron = require("node-cron");
+const { updatePendingDeposits } = require("./controllers/binanceController");
+
+cron.schedule("*/1 * * * *", async () => {
+  console.log("Checking for pending deposits...");
+  await updatePendingDeposits();
+});
 
 const app = express();
 app.use(cors());

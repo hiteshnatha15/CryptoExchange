@@ -183,7 +183,7 @@ const submitTransactionId = async (req, res) => {
       // Only update the user's balance if the deposit is successful and hasn't been processed yet
       if (deposit.status === "completed" && !existingDeposit) {
         const balanceUpdate =
-          deposit.network === "bep20"
+          deposit.network === "BSC"
             ? { $inc: { "balances.bep20": deposit.amount } }
             : { $inc: { "balances.trc20": deposit.amount } };
 
@@ -272,9 +272,61 @@ const processWithdrawal = async (req, res) => {
   }
 };
 
+const updatePendingDeposits = async () => {
+  try {
+    // Find all deposits with pending status
+    const pendingDeposits = await Deposit.find({ status: "pending" });
+
+    for (const deposit of pendingDeposits) {
+      // Check the deposit status using Binance API
+      const deposits = await binanceClient.depositHistory({
+        coin: "USDT",
+        network: deposit.network,
+      });
+
+      // Find the deposit that matches the transaction ID
+      const matchingDeposit = deposits.find(
+        (d) => d.txId === deposit.transactionId
+      );
+
+      if (matchingDeposit) {
+        // Check if the amount matches
+        const amountInDeposit = parseFloat(deposit.amount); // Amount from your deposit record
+        const amountInBinance = parseFloat(matchingDeposit.amount); // Amount from Binance
+
+        if (amountInDeposit === amountInBinance) {
+          // Update the deposit status based on Binance response
+          deposit.status =
+            matchingDeposit.status === 1 ? "completed" : "failed";
+          await deposit.save();
+
+          // Only update the user's balance if the deposit is successful
+          if (deposit.status === "completed") {
+            const balanceUpdate =
+              deposit.network === "BSC"
+                ? { $inc: { "balances.bep20": deposit.amount } }
+                : { $inc: { "balances.trc20": deposit.amount } };
+
+            await User.findByIdAndUpdate(deposit.userId, balanceUpdate);
+          }
+        }
+      } else {
+        console.log(
+          `Transaction ID ${deposit.transactionId} not found in Binance deposit history.`
+        );
+      }
+    }
+
+    console.log("Pending deposit statuses checked and updated.");
+  } catch (error) {
+    console.error("Error updating pending deposits:", error);
+  }
+};
+
 module.exports = {
   generateDepositAddress,
   submitTransactionId,
   processWithdrawal,
   deleteTransaction,
+  updatePendingDeposits,
 };

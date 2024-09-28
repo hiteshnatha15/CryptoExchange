@@ -1,5 +1,5 @@
 const User = require("../models/userModel"); // Adjust the path as necessary
-
+const Deposit = require("../models/depositModel"); // Adjust the path as necessary
 // Check if bank details are saved
 exports.getUserDetails = async (req, res) => {
   try {
@@ -9,13 +9,16 @@ exports.getUserDetails = async (req, res) => {
     if (user) {
       return res.json({
         userDetails: user,
+        success: true,
       });
     } else {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
   } catch (error) {
     console.error("Error fetching user details:", error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error", success: false });
   }
 };
 exports.checkBankDetails = async (req, res) => {
@@ -61,5 +64,27 @@ exports.addBankAccount = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error", error });
+  }
+};
+
+exports.getDeposits = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming you're using req.user from your authentication middleware
+    const deposits = await Deposit.find({ userId });
+
+    if (deposits.length > 0) {
+      console.log("Deposits found:", deposits);
+      return res.json({
+        deposits,
+        success: true,
+      });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No deposits found", success: false });
+    }
+  } catch (error) {
+    console.error("Error fetching deposit details:", error);
+    return res.status(500).json({ message: "Server error", success: false });
   }
 };
