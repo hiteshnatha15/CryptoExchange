@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
       default: 0, // Default processing balance
     },
   },
+  walletAddress: {
+    bep20: { type: String },
+    trc20: { type: String },
+  },
 });
 
 const User = mongoose.model("User", userSchema);

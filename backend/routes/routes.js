@@ -8,6 +8,7 @@ const {
   submitTransactionId,
   processWithdrawal,
   deleteTransaction,
+  sellCrypto
 } = require("../controllers/binanceController");
 
 const { sendOtp, verifyOtp } = require("../controllers/otpController");
@@ -15,7 +16,9 @@ const {
   checkBankDetails,
   addBankAccount,
   getUserDetails,
-  getDeposits
+  getDeposits,
+  getSells,
+  addWalletAddress
 } = require("../controllers/userController"); // Import your new controller
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
@@ -33,6 +36,9 @@ router.get("/api/checkBankDetails", auth, checkBankDetails); // Check bank detai
 router.post("/api/addBankAccount", auth, addBankAccount); // Add bank account
 router.get("/api/getUserDetails", auth, getUserDetails); // Get user details
 router.get("/api/getDeposits", auth, getDeposits); // Get deposits
+router.post("/api/sellCrypto", auth, sellCrypto); // Sell crypto
+router.get("/api/getSells", auth, getSells); // Get sells
+router.post("/api/addWalletAddress", auth, addWalletAddress); // Add wallet address
 
 // OTP Routes (These routes do not require authentication)
 router.post("/api/otp/send-otp", sendOtp);

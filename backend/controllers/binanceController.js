@@ -4,6 +4,7 @@ const Binance = require("binance-api-node").default;
 const Deposit = require("../models/depositModel");
 const User = require("../models/userModel");
 const Withdrawal = require("../models/withdrawlModel"); // Adjust the path as necessary
+const Sell = require("../models/sellModel"); // Adjust the path as necessary
 
 const binanceClient = Binance({
   apiKey: process.env.BINANCE_API_KEY,
@@ -323,10 +324,83 @@ const updatePendingDeposits = async () => {
   }
 };
 
+const sellCrypto = async (req, res) => {
+  const { amount, network } = req.body;
+  const userId = req.user.id;
+
+  if (!amount || !userId || !network) {
+    return res.status(400).json({
+      message: "Amount, userId, and network are required.",
+      success: false,
+    });
+  }
+
+  if (!["TRX", "BSC"].includes(network)) {
+    return res.status(400).json({
+      message:
+        "Invalid network. Only 'BSC' (BEP-20) and 'TRX' (TRC-20) are allowed.",
+      success: false,
+    });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+
+    const balanceField = network === "BSC" ? "bep20" : "trc20";
+    const availableBalance = user.balances[balanceField];
+
+    console.log(`Available balance for ${network}: ${availableBalance}`);
+    console.log(`Attempting to deduct amount: ${amount}`);
+
+    if (availableBalance < amount) {
+      return res.status(400).json({
+        message: "Insufficient balance.",
+        success: false,
+      });
+    }
+
+    user.balances.processing += amount;
+    user.balances[balanceField] -= amount;
+    await user.save();
+
+    const newSell = new Sell({
+      userId: new mongoose.Types.ObjectId(userId),
+      amount,
+      network,
+      status: "pending",
+      bankDetails: {
+        accountNumber: user.bankDetails.accountNumber,
+        accountHolderName: user.bankDetails.accountHolderName,
+        ifscCode: user.bankDetails.ifscCode,
+      },
+    });
+
+    await newSell.save();
+
+    res.json({
+      message: "Sell transaction is in process",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error processing sell transaction:", error);
+    res.status(500).json({
+      message: "Error processing sell transaction",
+      error: error.message,
+      success: false,
+    });
+  }
+};
 module.exports = {
   generateDepositAddress,
   submitTransactionId,
   processWithdrawal,
   deleteTransaction,
   updatePendingDeposits,
+  sellCrypto,
 };
