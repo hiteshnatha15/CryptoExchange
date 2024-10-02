@@ -29,9 +29,9 @@
             class="img-fluid"
           />
           <div class="text-center mt-3">
-            <h3>Welcome to Angelx</h3>
+            <h3>Welcome to OneXCrypto</h3>
             <p>
-              AngelX is the most trustable exchange partner, the more you
+              OneXCrypto is the most trustable exchange partner, the more you
               exchange, the more you earn.
             </p>
             <a
@@ -124,27 +124,12 @@
           window.location.href = "loginform.html";
           return false; // Return false if authentication fails
         }
-        return true; // Return true if authentication is successful
-      }
-    
-      document.addEventListener("DOMContentLoaded", function () {
-        // Perform a single redirection based on conditions
-        var token = localStorage.getItem("token");
-        var isLoggedIn = token !== null; // Check if token exists to determine login status
-        var currentPage = window.location.pathname.split("/").pop(); // Get the current page name
-    
-        if (!isLoggedIn && currentPage !== "mine.html") {
-          // If not logged in, redirect to mine.html
-          setTimeout(() => {
-            window.location.href = "mine.html";
-          }, 100);
-        } else if (isLoggedIn && currentPage !== "user.html") {
-          // If logged in, redirect to user.html
-          setTimeout(() => {
-            window.location.href = "user.html";
-          }, 100);
+        else{
+          window.location.href = "user.html";
+          return true; // Return true if authentication is successful
         }
-      });
+      }
+      window.onload = authenticate;
     </script>
     
     
