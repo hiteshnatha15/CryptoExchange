@@ -43,7 +43,7 @@ const verifyAdmin = async (req, res) => {
     }
     return res.status(200).send({ success: true });
   } catch (error) {
-    res.status(400).send({ error: "Invalid token." });
+    res.status(400).send({ error: "Invalid token." ,success: false});
     console.error(error);
   }
 };
