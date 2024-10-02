@@ -126,25 +126,27 @@
         }
         return true; // Return true if authentication is successful
       }
+    
       document.addEventListener("DOMContentLoaded", function () {
-        // Simulated login check
-        var isLoggedIn = true; // Replace this with the actual login check
-        var localStorageEmpty = localStorage.length === 0;
+        // Perform a single redirection based on conditions
+        var token = localStorage.getItem("token");
+        var isLoggedIn = token !== null; // Check if token exists to determine login status
+        var currentPage = window.location.pathname.split("/").pop(); // Get the current page name
     
-        // Perform a single redirection based on conditions, but avoid redirecting to the same page
-        var currentPage = window.location.pathname.split("/").pop(); // Get the current page name, e.g., mine.html
-    
-        if (localStorageEmpty && currentPage !== "mine.html") {
+        if (!isLoggedIn && currentPage !== "mine.html") {
+          // If not logged in, redirect to mine.html
           setTimeout(() => {
-            window.location.href = "mine.html"; // Redirect to mine.html only if not already on it
+            window.location.href = "mine.html";
           }, 100);
         } else if (isLoggedIn && currentPage !== "user.html") {
+          // If logged in, redirect to user.html
           setTimeout(() => {
-            window.location.href = "user.html"; // Redirect to user.html only if not already on it
+            window.location.href = "user.html";
           }, 100);
         }
       });
     </script>
+    
     
   </body>
 </html>
