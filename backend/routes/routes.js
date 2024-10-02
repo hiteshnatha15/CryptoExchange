@@ -37,6 +37,10 @@ const {
 } = require("../controllers/userController"); // Import your new controller
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
+
+router.post("/api/authUser", auth);
+router.post("/api/authAdmin", adminAuth);
+
 router.post(
   "/api/deposit/generate-deposit-address",
   auth,
