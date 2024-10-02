@@ -108,7 +108,9 @@
     <script>
       async function authenticate() {
         const token = localStorage.getItem("token");
+        console.log("Token:", token); // Debugging log
         if (!token) {
+          console.log("No token found. Redirecting to login."); // Debugging log
           window.location.href = "loginform.html";
           return false; // Return false if no token
         }
@@ -120,18 +122,17 @@
           },
         });
         const result = await response.json();
+        console.log("Authentication Result:", result); // Debugging log
         if (!result.success) {
+          console.log("Authentication failed. Redirecting to login."); // Debugging log
           window.location.href = "loginform.html";
           return false; // Return false if authentication fails
-        }
-        else{
+        } else {
+          console.log("Authentication successful. Redirecting to user."); // Debugging log
           window.location.href = "user.html";
           return true; // Return true if authentication is successful
         }
       }
-      window.onload = authenticate;
     </script>
-    
-    
   </body>
 </html>
