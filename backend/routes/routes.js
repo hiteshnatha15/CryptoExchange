@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { auth, verifyUser } = require("../middlewares/auth");
 const adminAuth = require("../middlewares/adminAuth");
+const {verifyAdmin} = require("../middlewares/adminAuth");
 
 const {
   adminLogin,
@@ -38,6 +39,7 @@ const {
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
 router.get("/api/authUser", verifyUser);
+router.get("/api/verifyAdmin", verifyAdmin);
 
 router.post(
   "/api/deposit/generate-deposit-address",
