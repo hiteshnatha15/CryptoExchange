@@ -205,12 +205,12 @@
         }
         return true; // Return true if authentication is successful
       }
-
+      var deposit = {};
       async function initPage() {
         const isAuthenticated = await authenticate();
         if (isAuthenticated) {
           // Only run the rest of the code if authenticated
-          const deposit = JSON.parse(localStorage.getItem("deposit")) || {};
+          deposit = JSON.parse(localStorage.getItem("deposit")) || {};
           const qrCodeImageElement = document.getElementById("qrCodeImage");
           console.log("Deposit:", deposit);
           qrCodeImageElement.src = deposit.qrCodeUrl || "";
