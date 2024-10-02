@@ -1,6 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
+const adminAuth = require("../middlewares/adminAuth");
+
+const {
+  adminLogin,
+  getAllSells,
+  getUserDetailsUsingAdmin,
+  approveSell,
+  rejectSell,
+  getAllDeposits,
+  rejectDeposit,
+  updatePrice,
+} = require("../controllers/adminController");
 
 // Importing controllers
 const {
@@ -8,7 +20,7 @@ const {
   submitTransactionId,
   processWithdrawal,
   deleteTransaction,
-  sellCrypto
+  sellCrypto,
 } = require("../controllers/binanceController");
 
 const { sendOtp, verifyOtp } = require("../controllers/otpController");
@@ -18,7 +30,10 @@ const {
   getUserDetails,
   getDeposits,
   getSells,
-  addWalletAddress
+  addWalletAddress,
+  resetTransactionPassword,
+  requestResetTransactionPassword,
+  getUsdtPrice,
 } = require("../controllers/userController"); // Import your new controller
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
@@ -39,9 +54,26 @@ router.get("/api/getDeposits", auth, getDeposits); // Get deposits
 router.post("/api/sellCrypto", auth, sellCrypto); // Sell crypto
 router.get("/api/getSells", auth, getSells); // Get sells
 router.post("/api/addWalletAddress", auth, addWalletAddress); // Add wallet address
+router.post("/api/resetTransactionPassword", auth, resetTransactionPassword); // Reset transaction password
+router.post(
+  "/api/requestResetTransactionPassword",
+  auth,
+  requestResetTransactionPassword
+); // Request reset transaction password
+router.get("/api/getUsdtPrice", getUsdtPrice); // Get USDT price
 
 // OTP Routes (These routes do not require authentication)
 router.post("/api/otp/send-otp", sendOtp);
 router.post("/api/otp/verify-otp", verifyOtp);
+
+// Admin Routes
+router.post("/api/admin/login", adminLogin);
+router.get("/api/admin/sells", adminAuth, getAllSells);
+router.post("/api/admin/getUserDetails", adminAuth, getUserDetailsUsingAdmin);
+router.post("/api/admin/approveSell", adminAuth, approveSell);
+router.post("/api/admin/rejectSell", adminAuth, rejectSell);
+router.get("/api/admin/deposits", adminAuth, getAllDeposits);
+router.post("/api/admin/rejectDeposit", adminAuth, rejectDeposit);
+router.post("/api/admin/updatePrice", adminAuth, updatePrice);
 
 module.exports = router;

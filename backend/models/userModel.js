@@ -28,6 +28,8 @@ const userSchema = new mongoose.Schema({
     bep20: { type: String },
     trc20: { type: String },
   },
+  transactionPassword: { type: String },
+  upiId: { type: String },
 });
 
 const User = mongoose.model("User", userSchema);

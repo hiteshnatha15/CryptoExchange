@@ -325,12 +325,18 @@ const updatePendingDeposits = async () => {
 };
 
 const sellCrypto = async (req, res) => {
-  const { amount, network } = req.body;
+  const { usdtAmount, rupeeAmount, network, transactionPassword } = req.body;
   const userId = req.user.id;
 
-  if (!amount || !userId || !network) {
+  if (
+    !usdtAmount ||
+    !rupeeAmount ||
+    !userId ||
+    !network ||
+    !transactionPassword
+  ) {
     return res.status(400).json({
-      message: "Amount, userId, and network are required.",
+      message: "USDT amount, rupee amount, userId, and network are required.",
       success: false,
     });
   }
@@ -351,27 +357,49 @@ const sellCrypto = async (req, res) => {
         success: false,
       });
     }
-
+    if (!user.transactionPassword) {
+      return res.status(400).json({
+        message: "Transaction Password not set.",
+        success: false,
+      });
+    }
+    if (user.transactionPassword !== transactionPassword) {
+      return res.status(400).json({
+        message: "Invalid Transaction Password.",
+        success: false,
+      });
+    }
+    if (
+      !user.bankDetails.accountNumber ||
+      !user.bankDetails.accountHolderName ||
+      !user.bankDetails.ifscCode
+    ) {
+      return res.status(400).json({
+        message: "Bank details not set.",
+        success: false,
+      });
+    }
     const balanceField = network === "BSC" ? "bep20" : "trc20";
     const availableBalance = user.balances[balanceField];
 
     console.log(`Available balance for ${network}: ${availableBalance}`);
-    console.log(`Attempting to deduct amount: ${amount}`);
+    console.log(`Attempting to deduct USDT amount: ${usdtAmount}`);
 
-    if (availableBalance < amount) {
+    if (availableBalance < usdtAmount) {
       return res.status(400).json({
         message: "Insufficient balance.",
         success: false,
       });
     }
 
-    user.balances.processing += amount;
-    user.balances[balanceField] -= amount;
+    user.balances.processing += usdtAmount;
+    user.balances[balanceField] -= usdtAmount;
     await user.save();
 
     const newSell = new Sell({
       userId: new mongoose.Types.ObjectId(userId),
-      amount,
+      usdtAmount,
+      rupeeAmount,
       network,
       status: "pending",
       bankDetails: {
@@ -381,7 +409,7 @@ const sellCrypto = async (req, res) => {
       },
     });
 
-    await newSell.save();
+    const result = await newSell.save();
 
     res.json({
       message: "Sell transaction is in process",

@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const User = require("../models/userModel"); // Adjust the path as necessary
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   // Get the token from the request header
   const authHeader = req.header("Authorization");
 
@@ -23,8 +24,15 @@ const auth = (req, res, next) => {
   try {
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Check if the user exists in the database
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
     // Add user information to the request object
-    req.user = decoded;
+    req.user = user;
     next();
   } catch (err) {
     console.log(token);
