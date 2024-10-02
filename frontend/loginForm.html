@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="assets/img/style.css" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="container pb-5 mt-2">
+        <form action="javascript:void(0);">
+          <div class="ps-3 fs-5 pt-3">
+            <a href="index.html"><i class="fa-solid fa-chevron-left"></i></a>
+          </div>
+          <div class="text-start ps-3 mt-3">
+            <h4>Login Account</h4>
+            <span style="font-size: 14px">please enter your mobile number</span>
+          </div>
+          <div class="input-group flex-nowrap bg-light mt-3 rounded">
+            <img src="assets/img/flag.png" width="50px" height="36px" alt="" />
+            <span class="input-group-text border-0" id="addon-wrapping"
+              >+91</span
+            >
+            <input
+              type="text"
+              name="mobileNumber"
+              class="form-control bg-light border-0"
+              aria-label="Username"
+              aria-describedby="addon-wrapping"
+              required
+            />
+          </div>
+          <div class="text-center mt-3">
+            <button type="submit" class="btn btn-dark button-login">
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      async function handleSubmit(event) {
+        event.preventDefault();
+
+        const mobileNumber = document
+          .querySelector('input[name="mobileNumber"]')
+          .value.trim();
+        console.log("Mobile Number:", mobileNumber);
+
+        if (!mobileNumber) {
+          console.error("Mobile number is required.");
+          alert("Please enter your mobile number."); // Optionally show an alert
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            "https://onexcrypto.xyz/api/otp/send-otp",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ mobile: mobileNumber }), // Update the format here
+            }
+          );
+
+          console.log("Response Status:", response.status);
+
+          if (response.ok) {
+            // Store the mobile number locally
+            localStorage.setItem("mobileNumber", mobileNumber);
+            window.location.href = "smsotp.html"; // Replace with your actual OTP page URL
+          } else {
+            const errorData = await response.json();
+            console.error("Failed to send OTP:", errorData);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      document.querySelector("form").addEventListener("submit", handleSubmit);
+    </script>
+  </body>
+</html>

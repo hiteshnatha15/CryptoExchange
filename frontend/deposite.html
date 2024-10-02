@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/img/style.css">
+</head>
+<style>
+    .custom-radio-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-radio-label:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-radio-label img {
+    margin-bottom: 8px;
+}
+
+input[type="radio"]:checked + .custom-radio-label {
+    border-color: #007bff;
+    background-color: #007bff;
+    color: white;
+}
+
+.custom-radio-label span {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.div-input {
+    position: relative;
+    padding-right: 50px;
+}
+
+.depo-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.depo-input + span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .custom-radio-label {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .div-input {
+        padding-right: 40px;
+    }
+
+    .depo-input {
+        padding: 8px;
+    }
+}
+
+</style>
+<body class="bg-white">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between p-2">
+                        <div><a href="exchange.html"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                    viewBox="0 -960 960 960" width="24px" fill="#5f6368">
+                                    <path
+                                        d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" /></svg></a></div>
+                        <div class="fw-bold fs-6">USDT Deposit</div>
+                        <div><a href="ExchangeHistory.html">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                    width="24px" fill="#5f6368">
+                                    <path
+                                        d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
+                                </svg></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid bg-dark text-light">
+            <div class="row">
+                <div class="d-flex justify-content-between">
+                    <div><img src="assets/img/ada.png" alt="" class="pt-2" width="30px"></div>
+                    <div>
+                        <h6 style="font-size: 10px; padding-top: 5px;">Angelx</h6>
+                        <p class="" style="font-size: 10px; padding-bottom: 0px;">Be the india leading digital currency exchange</p>
+                    </div>
+                    <div><i class="fa-solid fa-angle-right mt-2 text-white me-2 p-2"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <img src="assets/img/withdraw.jfif" alt="" class="img-fluid">
+
+        <div class="container pb-4 depo-container">
+            <div class="card border-0">
+                <div class="card-body bg-white">
+                    <p class="depo-heading-pera">Network</p>
+                    <div class="row text-center justify-content-center">
+                        <div class="col-5">
+                            <input type="radio" id="bep" name="network" value="BSC" class="d-none">
+                            <label for="bep" class="custom-radio-label">
+                                <img src="assets/img/bep.jpeg" width="18px" alt="">
+                                <span>BSC (BEP-20)</span>
+                            </label>
+                        </div>
+                        <div class="col-5">
+                            <input type="radio" id="trc" name="network" value="TRX" class="d-none">
+                            <label for="trc" class="custom-radio-label">
+                                <img src="assets/img/usdt.png" width="18px" alt="">
+                                <span>TRX (TRC-20)</span>
+                            </label>
+                        </div>
+                    </div>
+        
+                    <p class="depo-heading-pera mt-4 mb-1">Amount</p>
+                    <div class="div-input bg-light">
+                        <input type="number" id="amount" placeholder="Please enter the amount" class="depo-input pb-2 ps-2">
+                        <span><img src="assets/img/usdt.png" alt="" width="18px">USDT</span>
+                    </div>
+                    <p class="depo-heading-pera mt-2">Available($)<span id="balance"></span></p>
+                    <div class="text-center my-3">
+                        <button type="submit" class="btn btn-dark button-deposit" onclick="submitDeposit()">Deposit</button>
+                    </div>
+                    <p class="depo-pera"><span>&#9888;</span>For the safety of your funds, please note that the recharge
+                        address for each order is different. Please double-check carefully to avoid the risk of irretrievable funds.</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        async function authenticate() {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            window.location.href = "loginform.html";
+            return false; // Return false if no token
+          }
+          const response = await fetch("https://onexcrypto.xyz/api/authUser", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const result = await response.json();
+          if (!result.success) {
+            window.location.href = "loginform.html";
+            return false; // Return false if authentication fails
+          }
+          return true; // Return true if authentication is successful
+        }
+      
+        let bep20Balance = 0;
+        let trc20Balance = 0;
+      
+        async function getBalance() {
+          const response = await fetch('https://onexcrypto.xyz/api/getUserDetails', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          
+          const result = await response.json();
+          if (result.success) {
+            bep20Balance = result.userDetails.balances.bep20;
+            trc20Balance = result.userDetails.balances.trc20;
+            // Update the balance initially if a network is already selected
+            updateBalanceDisplay();
+          } else {
+            alert('Error fetching user details: ' + result.message);
+          }
+        }
+      
+        function updateBalanceDisplay() {
+          const selectedNetwork = document.querySelector('input[name="network"]:checked')?.value;
+          const balanceDisplay = document.getElementById('balance');
+      
+          if (selectedNetwork === 'BSC') {
+            balanceDisplay.textContent = bep20Balance;
+          } else if (selectedNetwork === 'TRX') {
+            balanceDisplay.textContent = trc20Balance;
+          } else {
+            balanceDisplay.textContent = '0'; // Default in case no network is selected
+          }
+        }
+      
+        // Load balances and set up event listeners after authentication
+        window.onload = async function() {
+          const isAuthenticated = await authenticate();
+          if (isAuthenticated) {
+            await getBalance(); // Load user balance if authenticated
+            // Add event listeners to radio buttons to update the balance display
+            document.querySelectorAll('input[name="network"]').forEach(radio => {
+              radio.addEventListener('change', updateBalanceDisplay);
+            });
+          }
+        };
+      
+        function submitDeposit() {
+          const network = document.querySelector('input[name="network"]:checked')?.value;
+          const amount = document.getElementById('amount').value;
+          console.log('Network:', network);
+          if (!network || !amount || amount <= 0) {
+            alert("Please select a valid network and enter a valid amount.");
+            return;
+          }
+      
+          const data = {
+            network: network,
+            amount: amount
+          };
+      
+          fetch('https://onexcrypto.xyz/api/deposit/generate-deposit-address', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(data)
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result.success) {
+              localStorage.setItem('deposit', JSON.stringify(result));
+              window.location.href = 'submitTransaction.html';
+            } else {
+              alert('Error generating deposit address: ' + result.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Error generating deposit address');
+          });
+        }
+      </script>
+      
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

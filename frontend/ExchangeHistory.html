@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="assets/img/style.css" />
+    <title>Exchange History</title>
+    <style>
+      .container {
+        padding: 15px; /* Adjusted padding */
+      }
+      .history-item {
+        background: #f9f9f9;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .status-finish {
+        color: green;
+      }
+      .status-failed {
+        color: red;
+      }
+      .network {
+        font-size: 14px;
+        color: #999;
+      }
+      .trade-details {
+        font-weight: bold;
+        font-size: 18px;
+      }
+      .create-time {
+        font-size: 12px;
+        color: #aaa;
+      }
+      .filter-buttons {
+        margin-bottom: 20px;
+      }
+      @media (max-width: 576px) {
+        .trade-details {
+          font-size: 16px; /* Smaller font size for mobile */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="container-fluid">
+        <div class="p-3 d-flex">
+          <a href="user.html">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#5f6368"
+            >
+              <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+          </a>
+          <h5 class="ms-5">Exchange History</h5>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Filter Buttons -->
+        <div class="filter-buttons d-flex justify-content-start">
+          <button class="btn btn-success me-2" id="btn-deposit">Deposit</button>
+          <button class="btn btn-warning" id="btn-sold">Sold</button>
+        </div>
+
+        <!-- Dynamic content should be injected here -->
+        <div id="history-list"></div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      async function authenticate() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "loginform.html";
+          return false; // Return false if no token
+        }
+        const response = await fetch("https://onexcrypto.xyz/api/authUser", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        if (!result.success) {
+          window.location.href = "loginform.html";
+          return false; // Return false if authentication fails
+        }
+        return true; // Return true if authentication is successful
+      }
+
+      // Fetch and display Deposits
+      async function getDeposits() {
+        const token = localStorage.getItem("token");
+        const response = await fetch("https://onexcrypto.xyz/api/getDeposits", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        const historyList = document.getElementById("history-list");
+        historyList.innerHTML = ""; // Clear existing content
+
+        data.deposits.forEach((deposit) => {
+          const historyItem = document.createElement("div");
+          historyItem.className = "history-item";
+          historyItem.setAttribute("data-type", "deposit");
+
+          historyItem.innerHTML = `
+            <div class="d-flex justify-content-between">
+                <span>Transaction ID: ${deposit.transactionId}</span>
+                <span class="status-finish">${deposit.status}</span>
+            </div>
+            <div class="network">Network: ${deposit.network}</div>
+            <div class="trade-details">USDT Amount: ${deposit.amount}</div>
+            <div class="create-time">Created At: ${new Date(
+              deposit.createdAt
+            ).toLocaleString()}</div>
+          `;
+
+          historyList.appendChild(historyItem);
+        });
+      }
+
+      // Fetch and display Withdrawals with bank details
+      async function getSold() {
+        const token = localStorage.getItem("token");
+        const response = await fetch("https://onexcrypto.xyz/api/getSells", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        const historyList = document.getElementById("history-list");
+        historyList.innerHTML = ""; // Clear existing content
+
+        if (data.success && data.sell.length > 0) {
+          data.sell.forEach((sold) => {
+            const { accountNumber, ifscCode, accountHolderName } =
+              sold.bankDetails || {};
+
+            const historyItem = document.createElement("div");
+            historyItem.className = "history-item";
+            historyItem.setAttribute("data-type", "withdrawal");
+
+            historyItem.innerHTML = `
+              <div class="d-flex justify-content-between">
+                  <span>Transaction ID: ${sold._id}</span>
+                  <span class="status-${
+                    sold.status === "pending" ? "failed" : "finish"
+                  }">${sold.status}</span>
+              </div>
+              <div class="network">Network: ${sold.network}</div>
+              <div class="trade-details">USDT Amount: ${sold.usdtAmount}</div>
+              <div class="trade-details">INR Amount: ₹${sold.rupeeAmount}</div>
+              <div class="create-time">Created At: ${new Date(
+                sold.createdAt
+              ).toLocaleString()}</div>
+              <div class="utr-no">UTR No: ${sold.utrNo}</div>
+              <hr />
+              <div class="bank-details">
+                  <strong>Bank Details:</strong>
+                  <div>Account Holder: ${accountHolderName}</div>
+                  <div>Account Number: ${accountNumber}</div>
+                  <div>IFSC Code: ${ifscCode}</div>
+              </div>
+            `;
+
+            historyList.appendChild(historyItem);
+          });
+        } else {
+          historyList.innerHTML = "<p>No Sell transactions available.</p>";
+        }
+      }
+
+      // Event listeners for button clicks
+      document
+        .getElementById("btn-deposit")
+        .addEventListener("click", getDeposits);
+      document.getElementById("btn-sold").addEventListener("click", getSold);
+
+      // Load deposits by default when the page loads
+      window.onload = async function () {
+        const isAuthenticated = await authenticate();
+        if (isAuthenticated) {
+          getDeposits(); // Load deposits if authenticated
+        }
+      };
+    </script>
+  </body>
+</html>
