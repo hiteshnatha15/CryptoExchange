@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middlewares/auth");
+const { auth, verifyUser } = require("../middlewares/auth");
 const adminAuth = require("../middlewares/adminAuth");
 
 const {
@@ -37,9 +37,7 @@ const {
 } = require("../controllers/userController"); // Import your new controller
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
-
-router.post("/api/authUser", auth);
-router.post("/api/authAdmin", adminAuth);
+router.get("/api/authUser", verifyUser);
 
 router.post(
   "/api/deposit/generate-deposit-address",
