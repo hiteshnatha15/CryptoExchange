@@ -136,16 +136,25 @@ exports.rejectDeposit = async (req, res) => {
   }
 };
 exports.updatePrice = async (req, res) => {
-    const { usdtPrice } = req.body;
-    try {
-        const price = await Price.findOne();
-        if (!price) {
-            return res.status(404).json({ message: "Price not found" });
-        }
-        price.usdtPrice = usdtPrice;
-        await price.save();
-        res.status(200).json({ message: "Price updated successfully" });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  const { usdtPrice } = req.body;
+  try {
+    const price = await Price.findOne();
+    if (!price) {
+      return res.status(404).json({ message: "Price not found" });
     }
+    price.usdtPrice = usdtPrice;
+    await price.save();
+    res.status(200).json({ message: "Price updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({ users });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };

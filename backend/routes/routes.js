@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { auth, verifyUser } = require("../middlewares/auth");
-const {adminAuth} = require("../middlewares/adminAuth");
-const {verifyAdmin} = require("../middlewares/adminAuth");
+const { adminAuth } = require("../middlewares/adminAuth");
+const { verifyAdmin } = require("../middlewares/adminAuth");
 
 const {
   adminLogin,
@@ -13,6 +13,7 @@ const {
   getAllDeposits,
   rejectDeposit,
   updatePrice,
+  getAllUsers
 } = require("../controllers/adminController");
 
 // Importing controllers
@@ -79,5 +80,6 @@ router.post("/api/admin/rejectSell", adminAuth, rejectSell);
 router.get("/api/admin/deposits", adminAuth, getAllDeposits);
 router.post("/api/admin/rejectDeposit", adminAuth, rejectDeposit);
 router.post("/api/admin/updatePrice", adminAuth, updatePrice);
+router.get("/api/admin/getUserDetails", adminAuth, getAllUsers);
 
 module.exports = router;
