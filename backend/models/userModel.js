@@ -23,13 +23,19 @@ const userSchema = new mongoose.Schema({
       type: Number,
       default: 0, // Default processing balance
     },
+    commission: {
+      // Field to store total commission earned
+      type: Number,
+      default: 0,
+    },
   },
   walletAddress: {
     bep20: { type: String },
     trc20: { type: String },
   },
   transactionPassword: { type: String },
-  upiId: { type: String },
+  referralCode: { type: String, unique: true }, // Unique referral code
+  referrals: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Store referred users
 });
 
 const User = mongoose.model("User", userSchema);

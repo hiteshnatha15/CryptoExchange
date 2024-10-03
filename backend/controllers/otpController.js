@@ -1,7 +1,5 @@
-const User = require("../models/userModel");
-const otpService = require("../services/otpService");
-const generateOtp = require("../utils/generateOtp");
-const jwt = require("jsonwebtoken");
+const Otp = require("../models/otpModel"); // Import the OTP model
+const User = require("../models/userModel"); // Import the User model
 
 const otpController = {
   sendOtp: async (req, res) => {
@@ -15,19 +13,21 @@ const otpController = {
     const otp = generateOtp();
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
 
-    let user = await User.findOne({ mobile });
-    if (!user) {
-      user = new User({
+    // Check if OTP entry exists for this mobile number
+    let otpEntry = await Otp.findOne({ mobile });
+    if (!otpEntry) {
+      // Create a new OTP entry
+      otpEntry = new Otp({
         mobile,
         otp,
         otpExpiry,
-        balances: { erc20: 0, trc20: 0 },
       });
     } else {
-      user.otp = otp;
-      user.otpExpiry = otpExpiry;
+      // Update existing OTP and expiry
+      otpEntry.otp = otp;
+      otpEntry.otpExpiry = otpExpiry;
     }
-    await user.save();
+    await otpEntry.save(); // Save OTP entry
 
     const sent = await otpService.sendOtp(mobile, otp);
     if (sent) {
@@ -37,6 +37,7 @@ const otpController = {
     }
   },
 
+  // ...verifyOtp method remains the same
   verifyOtp: async (req, res) => {
     let { mobile, otp } = req.body;
 
@@ -47,22 +48,31 @@ const otpController = {
     }
 
     mobile = `+91${mobile}`;
-    const user = await User.findOne({ mobile });
+    const otpEntry = await Otp.findOne({ mobile });
 
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
+    if (!otpEntry) {
+      return res.status(400).json({ message: "OTP not found" });
     }
 
-    if (user.otp === otp && user.otpExpiry > new Date()) {
+    if (otpEntry.otp === otp && otpEntry.otpExpiry > new Date()) {
+      // OTP is valid, create or update the user
+      let user = await User.findOne({ mobile });
+
+      if (!user) {
+        user = new User({
+          mobile,
+          balances: { erc20: 0, trc20: 0 },
+        });
+        await user.save(); // Save new user
+      }
+
       // Generate token
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
 
-      // Clear OTP and expiry
-      user.otp = undefined;
-      user.otpExpiry = undefined;
-      await user.save();
+      // Clear OTP entry
+      await Otp.deleteOne({ mobile }); // Remove OTP entry after successful verification
 
       return res.status(200).json({
         message: "OTP verified successfully",
