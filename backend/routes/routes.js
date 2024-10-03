@@ -13,7 +13,7 @@ const {
   getAllDeposits,
   rejectDeposit,
   updatePrice,
-  getAllUsers
+  getAllUserDetailsUsingAdmin
 } = require("../controllers/adminController");
 
 // Importing controllers
@@ -80,6 +80,6 @@ router.post("/api/admin/rejectSell", adminAuth, rejectSell);
 router.get("/api/admin/deposits", adminAuth, getAllDeposits);
 router.post("/api/admin/rejectDeposit", adminAuth, rejectDeposit);
 router.post("/api/admin/updatePrice", adminAuth, updatePrice);
-router.get("/api/admin/getUserDetails", adminAuth, getAllUsers);
+router.get("/api/admin/getAllUserDetails", adminAuth, getAllUserDetailsUsingAdmin);
 
 module.exports = router;
