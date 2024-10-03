@@ -2,6 +2,7 @@ const Otp = require("../models/otpModel"); // Import the OTP model
 const User = require("../models/userModel"); // Import the User model
 const generateOtp = require("../utils/generateOtp");
 const otpService = require("../services/otpService");
+const jwt = require("jsonwebtoken");
 
 const otpController = {
   sendOtp: async (req, res) => {
