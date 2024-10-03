@@ -13,6 +13,35 @@
   <link rel="stylesheet" href="assets/img/style.css">
 </head>
 <style>
+
+
+.bg-white {
+  background-color: #ffffff; /* White background for the cards */
+  transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+}
+
+.bg-white:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Hover effect for cards */
+}
+
+.head {
+  display: flex;
+  align-items: center; /* Vertically center items */
+}
+
+.waz-img {
+  border-radius: 50%; /* Circular logos */
+}
+
+.text-muted {
+  color: #6c757d; /* Muted color for icons */
+}
+
+.rounded {
+  border-radius: 0.5rem; /* Rounded corners for cards */
+}
+
+
 html, body {
   height: 100%;
   margin: 0;
@@ -57,10 +86,12 @@ footer {
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img src="assets/img/20241002_184926.jpg" class="d-block" alt="..."
-              height="100px">
+              height="100px"
+              style="border-radius: 10px;">
           </div>
           <div class="carousel-item">
-            <img src="assets/img/20241002_193345.jpg" class="d-block " alt="..." height="100px">
+            <img src="assets/img/20241002_193345.jpg" class="d-block " alt="..." height="100px"
+            style="border-radius: 10px;">
           </div>
 
         </div>
@@ -133,7 +164,7 @@ footer {
       </div>
         <div class="text-center">
           <div style="display: flex; justify-content: center; align-items: center;">
-            <a href="loginForm.html" id="loginButton" type="button" class="btn btn-dark button mb-3">Login for sell USDT</a>
+            <a href="loginform.html" id="loginButton" type="button" class="btn btn-dark button mb-3">Login for sell USDT</a>
           <a href="usdtButton.html" id="sellButton" type="button" class="btn btn-dark button mb-3" style="display: none;">Sell USDT</a>
           </div>
           
@@ -169,34 +200,39 @@ footer {
     <div class="row">
       <div class="col-12">
         <div class="d-flex justify-content-between">
-          <div class="bg-white py-2 me-2" style="flex: 1; padding: 10px;">
+          <div class="bg-white shadow-sm p-1 me-2 rounded" style="flex: 1;">
             <div class="head d-flex align-items-center">
-              <img src="assets/img/wazirx-wrx-logo-1B1169E0C7-seeklogo.com.png" alt="" class="waz-img" style="width: 40px; height: 40px;">
-              <h6 class="fw-bold ms-2 mb-0">WAZIRX </h6>
-              <a href="https://wazirx.com/" class="ms-auto" target="_blank"><i class="fa-solid fa-chevron-right"></i></a>
+              <img src="assets/img/wazirx-wrx-logo-1B1169E0C7-seeklogo.com.png" alt="WazirX Logo" class="waz-img" style="width: 40px; height: 40px;">
+              <h6 class="fw-bold ms-2 mb-0 me-2">WAZIRX  </h6>
+              <a href="https://wazirx.com/" class="ms-auto text-decoration-none" target="_blank">
+                <i class="fa-solid fa-chevron-right text-muted"></i>
+              </a>
             </div>
             <div class="mt-2">
-              <p class="mb-1">Avg <span class="fw-bold wazirx-price" style="font-size: 16px;">Loading...</span> Rs</p>
-              <p class="mb-1">Low <span class="fw-bold wazirx-low" style="font-size: 12px;">Loading...</span> Rs</p>
-              <p class="mb-0">High <span class="fw-bold wazirx-high" style="font-size: 12px;">Loading...</span> Rs</p>
+                <p class="mb-1">Avg: <span class=" wazirx-price" style="font-size: 16px;">Loading...</span></p>
+                <p class="mb-1">Low: <span class=" wazirx-low" style="font-size: 12px;">Loading...</span></p>
+                <p class="mb-0">High: <span class=" wazirx-high" style="font-size: 12px;">Loading...</span></p>
             </div>
           </div>
-
-          <div class="bg-white py-2 ms-2" style="flex:1; padding: 10px;">
+    
+          <div class="bg-white shadow-sm ms-2 p-1 rounded" style="flex: 1;">
             <div class="head d-flex align-items-center">
-              <img src="assets/img/bnb.png" class="waz-img" alt="" style="width: 40px; height: 40px;">
-              <h6 class="fw-bold ms-2 mb-0">BINANCE</h6>
-              <a href="https://p2p.binance.com/en/trade/BUY/USDT?fiat=INR&payment=ALL" class="ms-auto" target="_blank"><i class="fa-solid fa-chevron-right"></i></a>
+              <img src="assets/img/bnb.png" class="waz-img" alt="Binance Logo" style="width: 40px; height: 40px;">
+              <h6 class="fw-bold ms-2 mb-0 me-2">BINANCE</h6>
+              <a href="https://p2p.binance.com/en/trade/BUY/USDT?fiat=INR&payment=ALL" class="ms-auto text-decoration-none" target="_blank">
+                <i class="fa-solid fa-chevron-right text-muted"></i>
+              </a>
             </div>
             <div class="mt-2">
-              <p class="mb-1">Avg <span class="fw-bold binance-price" style="font-size: 16px;">Loading...</span> Rs</p>
-              <p class="mb-1">Low <span class="fw-bold binance-low" style="font-size: 12px;">Loading...</span> Rs</p>
-              <p class="mb-0">High <span class="fw-bold binance-high" style="font-size: 12px;">Loading...</span> Rs</p>
+              <p class="mb-1">Avg: <span class=" binance-price" style="font-size: 16px;">Loading...</span></p>
+              <p class="mb-1">Low: <span class=" binance-low" style="font-size: 12px;">Loading...</span></p>
+              <p class="mb-0">High: <span class=" binance-high" style="font-size: 12px;">Loading...</span></p>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
 
     <div class="text-center mt-3">
       <p class="pice10">Statistics based on the latest 10 pieces of data</p>
@@ -272,7 +308,8 @@ footer {
                     d="M477-80q-42 0-81.5-9T324-112q-46-20-75-48.5T220-224v-231q0-31 23.5-57t60.5-46q38-20 83.5-31t92.5-11q47 0 92.5 11t83.5 31q38 20 61 46t23 57v231q0 17-7.5 33T711-161q-14 14-32.5 26.5T637-112q1-5 3-28 0-58-41-99t-99-41q-43 0-76 23t-50 59q32 8 58.5 11t46.5 3q17 0 27.5-1t13.5-1v104q-11 1-21.5 1.5T477-80Zm123-220q33 0 56.5-23.5T680-380q0-33-23.5-56.5T600-460q-33 0-56.5 23.5T520-380q0 33 23.5 56.5T600-300ZM480-640q50 0 85-34.5t35-85.5q0-50-35-85t-85-35q-51 0-85.5 35T360-760q0 51 34.5 85.5T480-640Z" />
                 </svg>
                 <p>Mine</p>
-              </a></div>
+              </a>
+            </div>
 
           </div>
         </div>
@@ -285,81 +322,76 @@ footer {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-  <script>
-    function openPopup() {
-    document.getElementById("popup").style.display = "block";
-  }
-  function closePopup() {
-    document.getElementById("popup").style.display = "none";
-  }
-  window.addEventListener("load",closePopup);
-  </script>
-
-  <script>
+    <script>
+      function openPopup() {
+        document.getElementById("popup").style.display = "block";
+      }
     
-    document.addEventListener("DOMContentLoaded", function () {
-      
-  // Function to fetch WazirX USDT to INR price
-  function fetchWazirXPrice() {
-    fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://api.wazirx.com/api/v2/tickers/usdtinr"))
-      .then(response => {
-      if (!response.ok) {
-        throw new Error(`WazirX API error: ${response.status}`);
+      function closePopup() {
+        document.getElementById("popup").style.display = "none";
       }
-      return response.json();
-      })
-      .then(data => {
-      // Parse the JSON content from the allorigins response
-      let parsedData = JSON.parse(data.contents);
-      // Checking if the expected data structure exists
-      if (parsedData && parsedData.ticker) {
-        let wazirxPrice = parsedData.ticker.last; // Using the 'last' price from the response
-        let wazirxLow = parsedData.ticker.low; // Using the 'low' price from the response
-        let wazirxHigh = parsedData.ticker.high; // Using the 'high' price from the response
-        document.querySelector(".wazirx-price").innerText = `₹ ${wazirxPrice}`;
-        document.querySelector(".wazirx-low").innerText = `₹ ${wazirxLow}`;
-        document.querySelector(".wazirx-high").innerText = `₹ ${wazirxHigh}`;
-      } else {
-        throw new Error("WazirX: Unexpected API response structure.");
-      }
-      })
-      .catch(error => {
-      console.error("Error fetching WazirX price:", error);
-      document.querySelector(".wazirx-price").innerText = "Error fetching WazirX price";
-      document.querySelector(".wazirx-low").innerText = "Error";
-      document.querySelector(".wazirx-high").innerText = "Error";
+    
+      // Close popup when the page loads
+      window.addEventListener("load", closePopup);
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Function to fetch WazirX USDT to INR price
+        function fetchWazirXPrice() {
+          fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://api.wazirx.com/api/v2/tickers/usdtinr"))
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`WazirX API error: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              // Parse the JSON content from the allorigins response
+              let parsedData = JSON.parse(data.contents);
+              if (parsedData && parsedData.ticker) {
+                let wazirxPrice = parsedData.ticker.last; // Using the 'last' price from the response
+                let wazirxLow = parsedData.ticker.low; // Using the 'low' price from the response
+                let wazirxHigh = parsedData.ticker.high; // Using the 'high' price from the response
+                document.querySelector(".wazirx-price").innerText = `₹ ${wazirxPrice}`;
+                document.querySelector(".wazirx-low").innerText = `₹ ${wazirxLow}`;
+                document.querySelector(".wazirx-high").innerText = `₹ ${wazirxHigh}`;
+              } else {
+                throw new Error("WazirX: Unexpected API response structure.");
+              }
+            })
+            .catch(error => {
+              console.error("Error fetching WazirX price:", error);
+              document.querySelector(".wazirx-price").innerText = "Error fetching WazirX price";
+              document.querySelector(".wazirx-low").innerText = "Error";
+              document.querySelector(".wazirx-high").innerText = "Error";
+            });
+        }
+    
+        // Function to fetch Binance USDT to INR price
+        function fetchBinancePrice() {
+          fetch("https://api.exchangerate-api.com/v4/latest/USD")
+            .then(response => response.json())
+            .then(data => {
+              let binancePrice = data.rates.INR;
+              document.querySelector(".binance-price").innerText = `₹ ${binancePrice}`;
+              document.querySelector(".binance-low").innerText = `₹ ${binancePrice}`;
+              document.querySelector(".binance-high").innerText = `₹ ${binancePrice}`;
+            })
+            .catch(error => {
+              console.error("Error fetching Binance price:", error);
+              document.querySelector(".binance-price").innerText = "Error";
+            });
+        }
+    
+        // Call both functions to fetch prices
+        fetchWazirXPrice();
+        fetchBinancePrice();
       });
-  }
-
-  // Function to fetch Binance USDT to INR price
-  function fetchBinancePrice() {
-    fetch("https://api.exchangerate-api.com/v4/latest/USD")
-      .then(response => response.json())
-      .then(data => {
-        // Extract the INR exchange rate from the response
-        let binancePrice = data.rates.INR;
-        // Display Binance price in the span with class 'binance-price'
-        document.querySelector(".binance-price").innerText = `₹ ${binancePrice}`;
-        document.querySelector(".binance-low").innerText = `₹ ${binancePrice}`;
-        document.querySelector(".binance-high").innerText = `₹ ${binancePrice}`;
-      })
-      .catch(error => {
-        console.error("Error fetching Binance price:", error);
-        document.querySelector(".binance-price").innerText = "Error";
-      });
-  }
-
-  // Call both functions to fetch prices
-  fetchWazirXPrice();
-  fetchBinancePrice();
-});
-
-  </script>
-  
-  <script>
-
-
-async function getUsdtprice() {
+    </script>
+    
+    <script>
+      async function getUsdtprice() {
         const response = await fetch("https://onexcrypto.xyz/api/getUsdtPrice", {
           method: "GET",
           headers: {
@@ -371,103 +403,87 @@ async function getUsdtprice() {
         document.querySelectorAll(".usdt-price").forEach(element => {
           element.innerText = usdtPrice;
         });
+    
         // Add a temporary animation effect
         const svg = document.querySelector(".refresh-icon");
-        svg.classList.add("clicked"); // Add a class for animation
-
-        // Remove the class after animation duration (e.g., 0.5s)
+        svg.classList.add("clicked");
+    
         setTimeout(() => {
           svg.classList.remove("clicked");
         }, 500);
       }
-
-    // Function to check login status
-    function checkLoginStatus() {
-      // Check if the user is logged in (e.g., token stored in localStorage)
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
-  
-      // If the user is logged in
-      if (isLoggedIn === "true") {
-        // Show the "Sell USDT" button and hide the "Login" button
-        document.getElementById("sellButton").style.display = "block";
-        document.getElementById("loginButton").style.display = "none";
-      } else {
-        // Otherwise, show the "Login" button and hide the "Sell USDT" button
-        document.getElementById("loginButton").style.display = "block";
-        document.getElementById("sellButton").style.display = "none";
-      }
-    }
-  
-    // Simulate a login function (replace with real login logic)
-    function login() {
-      // Save login status in localStorage
-      localStorage.setItem("isLoggedIn", "true");
-  
-      // Refresh the button display
-      checkLoginStatus();
-    }
-  
-    // Simulate logout function (if needed)
-    function logout() {
-      localStorage.removeItem("isLoggedIn");
-      checkLoginStatus();
-    }
-  
-    // Call the checkLoginStatus function when the page loads
-    window.onload = function () {
-      checkLoginStatus();
-      getUsdtprice();
-    };
-  </script>
-  <script>
-    let countdownInterval;
-    let countdownTime = 60; // Initial countdown time
-  
-    document.addEventListener("DOMContentLoaded", function () {
-      checkLoginStatus();
-      getUsdtprice();
-      startCountdown(); // Start countdown on page load
-    });
-  
-    // Function to start the countdown
-    function startCountdown() {
-      countdownTime = 60; // Reset to 60 seconds
-      document.getElementById("countdown").innerText = countdownTime;
-  
-      // Clear existing interval if any
-      clearInterval(countdownInterval);
-  
-      // Start a new interval
-      countdownInterval = setInterval(() => {
-        countdownTime--;
-        document.getElementById("countdown").innerText = countdownTime;
-  
-        // If countdown reaches 0, fetch prices
-        if (countdownTime <= 0) {
-          clearInterval(countdownInterval);
-          getUsdtprice();
-          startCountdown(); // Restart the countdown
+    
+      // Function to check login status
+      function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+    
+        if (isLoggedIn === "true") {
+          document.getElementById("sellButton").style.display = "block";
+          document.getElementById("loginButton").style.display = "none";
+        } else {
+          document.getElementById("loginButton").style.display = "block";
+          document.getElementById("sellButton").style.display = "none";
         }
-      }, 1000);
-    }
-  
-    // Function to refresh price on SVG click
-    function refreshPrice() {
-      getUsdtprice(); // Fetch the latest price
-      startCountdown(); // Reset the countdown
-      // Add a temporary animation effect
-      const svg = document.querySelector(".refresh-icon");
-      svg.classList.add("clicked"); // Add a class for animation
-  
-      // Remove the class after animation duration (e.g., 0.5s)
-      setTimeout(() => {
-        svg.classList.remove("clicked");
-      }, 500);
-    }
-  
-    // Your existing getUsdtprice and other functions here...
-  
-  </script>
+      }
+    
+      // Simulated login function (replace with real login logic)
+      function login() {
+        localStorage.setItem("isLoggedIn", "true");
+        checkLoginStatus();
+      }
+    
+      // Simulated logout function
+      function logout() {
+        localStorage.removeItem("isLoggedIn");
+        checkLoginStatus();
+      }
+    
+      window.onload = function () {
+        checkLoginStatus();
+        getUsdtprice();
+      };
+    </script>
+    
+    <script>
+      let countdownInterval;
+      let countdownTime = 60;
+    
+      document.addEventListener("DOMContentLoaded", function () {
+        checkLoginStatus();
+        getUsdtprice();
+        startCountdown();
+      });
+    
+      function startCountdown() {
+        countdownTime = 60;
+        document.getElementById("countdown").innerText = countdownTime;
+    
+        clearInterval(countdownInterval);
+    
+        countdownInterval = setInterval(() => {
+          countdownTime--;
+          document.getElementById("countdown").innerText = countdownTime;
+    
+          if (countdownTime <= 0) {
+            clearInterval(countdownInterval);
+            getUsdtprice();
+            startCountdown();
+          }
+        }, 1000);
+      }
+    
+      function refreshPrice() {
+        getUsdtprice();
+        startCountdown();
+        const svg = document.querySelector(".refresh-icon");
+        svg.classList.add("clicked");
+    
+        setTimeout(() => {
+          svg.classList.remove("clicked");
+        }, 500);
+      }
+    </script>
+    
   
   <style>
     .clicked {
