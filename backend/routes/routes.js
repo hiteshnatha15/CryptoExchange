@@ -13,7 +13,7 @@ const {
   getAllDeposits,
   rejectDeposit,
   updatePrice,
-  getAllUserDetailsUsingAdmin
+  getAllUserDetailsUsingAdmin,
 } = require("../controllers/adminController");
 
 // Importing controllers

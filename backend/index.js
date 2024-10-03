@@ -6,7 +6,6 @@ const cors = require("cors");
 const cron = require("node-cron");
 const { updatePendingDeposits } = require("./controllers/binanceController");
 const path = require('path');
-const User = require("./models/userModel");
 
 cron.schedule("*/1` * * * *", async () => {
   console.log("Checking for pending deposits...");
