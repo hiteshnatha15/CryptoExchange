@@ -3,6 +3,7 @@ const router = express.Router();
 const { auth, verifyUser } = require("../middlewares/auth");
 const { adminAuth } = require("../middlewares/adminAuth");
 const { verifyAdmin } = require("../middlewares/adminAuth");
+const referralCommissionController = require('../controllers/referralCommissionController')
 
 const {
   adminLogin,
@@ -36,6 +37,10 @@ const {
   resetTransactionPassword,
   requestResetTransactionPassword,
   getUsdtPrice,
+  checkRegistration,
+  deleteUser,
+  deleteTransactions,
+  getReferralCode
 } = require("../controllers/userController"); // Import your new controller
 
 // Deposit and Withdrawal Routes (Protected routes, require authentication)
@@ -65,11 +70,14 @@ router.post(
   auth,
   requestResetTransactionPassword
 ); // Request reset transaction password
+router.get("/api/getReferralCode",auth,getReferralCode)
 router.get("/api/getUsdtPrice", getUsdtPrice); // Get USDT price
-
+router.post("/api/deleteUser",deleteUser)
+router.get("/api/deleteTransactions",deleteTransactions)
 // OTP Routes (These routes do not require authentication)
 router.post("/api/otp/send-otp", sendOtp);
 router.post("/api/otp/verify-otp", verifyOtp);
+router.post("/api/user/check-registration",checkRegistration)
 
 // Admin Routes
 router.post("/api/admin/login", adminLogin);
@@ -81,5 +89,6 @@ router.get("/api/admin/deposits", adminAuth, getAllDeposits);
 router.post("/api/admin/rejectDeposit", adminAuth, rejectDeposit);
 router.post("/api/admin/updatePrice", adminAuth, updatePrice);
 router.get("/api/admin/getAllUserDetails", adminAuth, getAllUserDetailsUsingAdmin);
+router.get("/api/commissionHistory", auth,referralCommissionController.getUserCommissions);
 
 module.exports = router;

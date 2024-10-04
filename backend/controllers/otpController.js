@@ -1,5 +1,5 @@
-const Otp = require("../models/otpModel"); // Import the OTP model
-const User = require("../models/userModel"); // Import the User model
+const Otp = require("../models/otpModel");
+const User = require("../models/userModel");
 const generateOtp = require("../utils/generateOtp");
 const otpService = require("../services/otpService");
 const jwt = require("jsonwebtoken");
@@ -12,6 +12,7 @@ const otpController = {
       return res.status(400).json({ message: "Mobile number is required" });
     }
 
+    // Format mobile number for consistency
     mobile = `+91${mobile}`;
     const otp = generateOtp();
     const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // OTP expires in 10 minutes
@@ -19,7 +20,7 @@ const otpController = {
     // Check if OTP entry exists for this mobile number
     let otpEntry = await Otp.findOne({ mobile });
     if (!otpEntry) {
-      // Create a new OTP entry
+      // Create a new OTP entry if it doesn't exist
       otpEntry = new Otp({
         mobile,
         otp,
@@ -32,6 +33,7 @@ const otpController = {
     }
     await otpEntry.save(); // Save OTP entry
 
+    // Send OTP using the otpService
     const sent = await otpService.sendOtp(mobile, otp);
     if (sent) {
       res.status(200).json({ message: "OTP sent successfully" });
@@ -40,9 +42,8 @@ const otpController = {
     }
   },
 
-  // ...verifyOtp method remains the same
   verifyOtp: async (req, res) => {
-    let { mobile, otp } = req.body;
+    let { mobile, otp, referralCode } = req.body;
 
     if (!mobile || !otp) {
       return res
@@ -50,6 +51,7 @@ const otpController = {
         .json({ message: "Mobile number and OTP are required" });
     }
 
+    // Format mobile number
     mobile = `+91${mobile}`;
     const otpEntry = await Otp.findOne({ mobile });
 
@@ -57,25 +59,47 @@ const otpController = {
       return res.status(400).json({ message: "OTP not found" });
     }
 
+    // Verify OTP and check expiry
     if (otpEntry.otp === otp && otpEntry.otpExpiry > new Date()) {
       // OTP is valid, create or update the user
       let user = await User.findOne({ mobile });
 
       if (!user) {
+        // Check if referral code is valid
+        let referredBy = null;
+        if (referralCode) {
+          const referrer = await User.findOne({ referralCode });
+          if (referrer) {
+            referredBy = referralCode; // Valid referral code, assign it to the new user
+          } else {
+            return res.status(400).json({ message: "Invalid referral code" });
+          }
+        }
+
+        // Create new user and associate the referrer
         user = new User({
           mobile,
-          balances: { erc20: 0, trc20: 0 },
+          balances: { bep20: 0, trc20: 0 }, // Default balances
+          referredBy, // Store referral code of the referrer if provided
         });
-        await user.save(); // Save new user
-      }
+        await user.save();
 
-      // Generate token
+        // If referred, update referrer's `referrals` list
+        if (referredBy) {
+          await User.findOneAndUpdate(
+            { referralCode: referredBy },
+            { $push: { referrals: user._id } }
+          );
+        }
+      }
+      console.log(user);
+      // Generate a JWT token for the user
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
 
-      // Clear OTP entry
-      await Otp.deleteOne({ mobile }); // Remove OTP entry after successful verification
+      // Clear OTP entry after successful verification
+      await Otp.deleteOne({ mobile });
 
       return res.status(200).json({
         message: "OTP verified successfully",

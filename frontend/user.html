@@ -255,8 +255,8 @@
                 if (result.success) {
                     // alert(`Deposit address generated successfully: ${result.address}`);
                     document.getElementById('mobileNumberDisplay').textContent = result.userDetails.mobile ? result.userDetails.mobile : '';
-                    document.getElementById('total-amount').textContent = result.userDetails.balances.bep20 + result.userDetails.balances.trc20+result.userDetails.balances.processing; // Total
-                    document.getElementById('available-amount').textContent =  result.userDetails.balances.bep20 + result.userDetails.balances.trc20+result.userDetails.balances.processing- result.userDetails.balances.processing// Available (example)
+                    document.getElementById('total-amount').textContent = result.userDetails.balances.bep20 + result.userDetails.balances.trc20+result.userDetails.balances.processing+result.userDetails.balances.commission; // Total
+                    document.getElementById('available-amount').textContent =  result.userDetails.balances.bep20 + result.userDetails.balances.trc20+result.userDetails.balances.processing + result.userDetails.balances.commission - result.userDetails.balances.processing// Available (example)
                     document.getElementById('progressing-amount').textContent = result.userDetails.balances.processing; // Progressing (example)
 
                 } else {

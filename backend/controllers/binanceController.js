@@ -5,6 +5,7 @@ const Deposit = require("../models/depositModel");
 const User = require("../models/userModel");
 const Withdrawal = require("../models/withdrawlModel"); // Adjust the path as necessary
 const Sell = require("../models/sellModel"); // Adjust the path as necessary
+const Commission=require('../models/commissionModel')
 
 const binanceClient = Binance({
   apiKey: process.env.BINANCE_API_KEY,
@@ -160,7 +161,6 @@ const submitTransactionId = async (req, res) => {
     // Find the deposit that matches the transaction ID
     const matchingDeposit = deposits.find((d) => d.txId === transactionId);
 
-    // Log if a matching transaction was found
     if (matchingDeposit) {
       console.log("Matching deposit found:", matchingDeposit);
 
@@ -168,17 +168,15 @@ const submitTransactionId = async (req, res) => {
       const amountInDeposit = parseFloat(deposit.amount); // Amount from your deposit record
       const amountInBinance = parseFloat(matchingDeposit.amount); // Amount from Binance
 
-      // Check if the amounts match
       if (amountInDeposit !== amountInBinance) {
         return res.status(400).json({
           success: false,
-          message:
-            "The deposit amount does not match the transaction amount from Binance.",
+          message: "The deposit amount does not match the transaction amount from Binance.",
         });
       }
 
       // Update the deposit status based on Binance response
-      deposit.status = matchingDeposit.status === 1 ? "completed" : "failed"; // Status check fixed
+      deposit.status = matchingDeposit.status === 1 ? "completed" : "failed";
       await deposit.save();
 
       // Only update the user's balance if the deposit is successful and hasn't been processed yet
@@ -188,7 +186,45 @@ const submitTransactionId = async (req, res) => {
             ? { $inc: { "balances.bep20": deposit.amount } }
             : { $inc: { "balances.trc20": deposit.amount } };
 
+        // Update user's balance
         await User.findByIdAndUpdate(userId, balanceUpdate);
+
+        // Check if the user was referred by someone
+        const user = await User.findById(userId);
+        if (user.referredBy) {
+          // Find the referrer
+          const referrer = await User.findOne({ referralCode: user.referredBy });
+          if (referrer) {
+            // Calculate 0.1% commission on the deposit amount
+            const commission = amountInDeposit * 0.001;
+          
+            // Update the referrer's commission balance
+            referrer.balances.commission += commission;
+          
+            // Save the referrer
+            await referrer.save();
+            
+            // Log the referrer's updated balance
+            console.log(`Updated commission balance for ${referrer.mobile}: ${referrer.balances.commission}`);
+          
+            // Create an entry in the Commission model
+            const commissionEntry = new Commission({
+              userId: referrer._id, // Referrer ID
+              depositId: deposit._id, // Deposit associated with the commission
+              amount: commission, // Commission amount
+              commissionAmount: commission, // Assuming this is the same as amount
+              referredUserId: userId, // ID of the user who referred
+              referrerId: referrer._id, // ID of the referrer
+            });
+            await commissionEntry.save();
+          
+            console.log(`Commission of ${commission} credited to referrer ${referrer.mobile} and saved in commission model.`);
+          } else {
+            console.warn("Referrer not found with the provided referral code.");
+          }
+        } else {
+          console.warn("User does not have a referrer.");
+        }
       }
 
       res.json({
@@ -212,6 +248,7 @@ const submitTransactionId = async (req, res) => {
     });
   }
 };
+
 
 // Process withdrawal
 const processWithdrawal = async (req, res) => {
@@ -379,21 +416,40 @@ const sellCrypto = async (req, res) => {
         success: false,
       });
     }
+
     const balanceField = network === "BSC" ? "bep20" : "trc20";
-    const availableBalance = user.balances[balanceField];
+    let availableBalance = user.balances[balanceField];
+    let commission = user.balances.commission; // Assuming there is a commission field in balances
 
     console.log(`Available balance for ${network}: ${availableBalance}`);
+    console.log(`Commission balance: ${commission}`);
     console.log(`Attempting to deduct USDT amount: ${usdtAmount}`);
 
-    if (availableBalance < usdtAmount) {
+    // Check if commission and available balance together cover the USDT amount
+    if (commission + availableBalance < usdtAmount) {
       return res.status(400).json({
-        message: "Insufficient balance.",
+        message: "Insufficient balance, including commission.",
         success: false,
       });
     }
 
-    user.balances.processing += usdtAmount;
-    user.balances[balanceField] -= usdtAmount;
+    let remainingUSDT = usdtAmount;
+
+    // Deduct from commission first
+    if (commission >= remainingUSDT) {
+      user.balances.commission -= remainingUSDT;
+      remainingUSDT = 0;
+    } else {
+      remainingUSDT -= commission;
+      user.balances.commission = 0;
+    }
+
+    // Deduct from main balance if necessary
+    if (remainingUSDT > 0) {
+      user.balances[balanceField] -= remainingUSDT;
+    }
+
+    user.balances.processing += usdtAmount; // Move the entire amount to 'processing'
     await user.save();
 
     const newSell = new Sell({
@@ -424,6 +480,7 @@ const sellCrypto = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   generateDepositAddress,
   submitTransactionId,

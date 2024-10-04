@@ -5,6 +5,37 @@ const otpService = require("../services/otpService");
 const generateOtp = require("../utils/generateOtp");
 const Price = require("../models/priceModel");
 // Check if bank details are saved
+
+exports.checkRegistration = async (req, res) => {
+  let { mobile } = req.body;
+
+  // Check if the mobile number starts with '+91', if not, prepend it
+  if (!mobile) {
+      return res.status(400).json({ message: "Mobile number is required." });
+  }
+
+  // Ensure the mobile number starts with +91
+  if (!mobile.startsWith("+91")) {
+      mobile = "+91" + mobile; // Prepend +91 if not present
+  }
+
+  try {
+      const user = await User.findOne({ mobile });
+
+      if (user) {
+          // User is registered
+          return res.status(200).json({ isRegistered: true });
+      } else {
+          // User is not registered
+          return res.status(200).json({ isRegistered: false });
+      }
+  } catch (error) {
+      console.error("Error checking registration:", error);
+      return res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+
 exports.getUserDetails = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming you're using req.user from your authentication middleware
@@ -271,5 +302,78 @@ exports.getUsdtPrice = async (req, res) => {
   } catch (error) {
     console.error("Error fetching price details:", error);
     return res.status(500).json({ message: "Server error", success: false });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { mobile } = req.body;
+
+  // Check if mobile number is provided
+  if (!mobile) {
+      return res.status(400).json({ message: "Mobile number is required." });
+  }
+
+  // Ensure the mobile number starts with +91
+  const formattedMobile = mobile.startsWith("+91") ? mobile : "+91" + mobile;
+
+  try {
+      // Find the user by mobile number and delete
+      const user = await User.findOneAndDelete({ mobile: formattedMobile });
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found." });
+      }
+      console.log(user)
+      res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+      console.error("Error deleting user:", error);
+      return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+exports.deleteTransactions = async (req, res) => {
+  try {
+      // Delete all transactions from the Deposit collection
+      const deleteDeposits = await Deposit.deleteMany({});
+      
+      // Delete all transactions from the Withdrawal collection
+      const deleteWithdrawals = await Sell.deleteMany({});
+
+      res.status(200).json({
+          message: "All transactions have been deleted successfully.",
+          deletedDepositsCount: deleteDeposits.deletedCount,
+          deletedWithdrawalsCount: deleteWithdrawals.deletedCount
+      });
+  } catch (error) {
+      console.error("Error deleting transactions:", error);
+      return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+exports.getReferralCode = async (req, res) => {
+  const id = req.user.id; // Get the user ID from the request object
+
+  try {
+    const user = await User.findById(id); // Find the user by ID
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // Return the referral code in the response
+    return res.status(200).json({
+      success: true,
+      referralCode: user.referralCode, // Assuming `referralCode` is a field in the User model
+    });
+  } catch (error) {
+    console.error("Error retrieving referral code:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+      error: error.message,
+    });
   }
 };

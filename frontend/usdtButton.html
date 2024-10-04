@@ -513,7 +513,7 @@ svg {
                 const amountInput = document.getElementById('amountInput');
                 const receivedAmount = document.getElementById('receivedAmount');
     
-                let balanceBEP20 = parseFloat(data.userDetails.balances.bep20) || 0;
+                let balanceBEP20 = parseFloat(data.userDetails.balances.bep20+data.userDetails.balances.commission) || 0;
                 let balanceTRC20 = parseFloat(data.userDetails.balances.trc20) || 0;
                 let currentBalance = balanceBEP20; // Default to BEP-20
     
