@@ -95,7 +95,7 @@ const otpController = {
       console.log(user);
       // Generate a JWT token for the user
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "24h",
       });
 
       // Clear OTP entry after successful verification

@@ -158,3 +158,43 @@ exports.getAllUserDetailsUsingAdmin = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.updateUserBalance = async (req, res) => {
+  try {
+    const { userId, bep20, trc20, processing, commission } = req.body;
+    console.log(userId);
+
+    // Check if the userId is provided
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" ,success:false});
+    }
+
+    // Find the user by userId
+    const user = await User.findById(userId);
+    console.log("user");
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" ,success:false});
+    }
+    // Update the user's balances
+    user.balances.bep20 = bep20 !== undefined ? bep20 : user.balances.bep20;
+    user.balances.trc20 = trc20 !== undefined ? trc20 : user.balances.trc20;
+    user.balances.processing = processing !== undefined ? processing : user.balances.processing;
+    user.balances.commission = commission !== undefined ? commission : user.balances.commission;
+
+    // Save the updated user
+    await user.save();
+    console.log(user);
+    // Send success response
+    res.status(200).json({
+      message: "User balance updated successfully",
+      updatedBalances: user.balances,
+      success:true
+    });
+  } catch (error) {
+    console.error("Error updating user balance:", error);
+    res.status(500).json({ message: "Internal server error" ,
+      success:false,
+    });
+  }
+};

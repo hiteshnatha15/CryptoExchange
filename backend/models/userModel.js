@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     accountNumber: { type: String },
     ifscCode: { type: String },
     accountHolderName: { type: String },
+    upiId:{type:String}
   },
   otp: { type: String }, // Field to store OTP for verification
   otpExpiry: { type: Date }, // Field to store OTP expiry time
@@ -42,4 +43,3 @@ userSchema.pre("save", function (next) {
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-``

@@ -15,6 +15,7 @@ const {
   rejectDeposit,
   updatePrice,
   getAllUserDetailsUsingAdmin,
+  updateUserBalance
 } = require("../controllers/adminController");
 
 // Importing controllers
@@ -72,8 +73,9 @@ router.post(
 ); // Request reset transaction password
 router.get("/api/getReferralCode",auth,getReferralCode)
 router.get("/api/getUsdtPrice", getUsdtPrice); // Get USDT price
-router.post("/api/deleteUser",deleteUser)
-router.get("/api/deleteTransactions",deleteTransactions)
+// router.post("/api/deleteUser",deleteUser)
+// router.get("/api/deleteTransactions",deleteTransactions)
+
 // OTP Routes (These routes do not require authentication)
 router.post("/api/otp/send-otp", sendOtp);
 router.post("/api/otp/verify-otp", verifyOtp);
@@ -90,5 +92,6 @@ router.post("/api/admin/rejectDeposit", adminAuth, rejectDeposit);
 router.post("/api/admin/updatePrice", adminAuth, updatePrice);
 router.get("/api/admin/getAllUserDetails", adminAuth, getAllUserDetailsUsingAdmin);
 router.get("/api/commissionHistory", auth,referralCommissionController.getUserCommissions);
+router.post('/api/admin/updateBalances',adminAuth,updateUserBalance);
 
 module.exports = router;

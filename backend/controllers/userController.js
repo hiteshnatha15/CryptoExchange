@@ -61,20 +61,26 @@ exports.checkBankDetails = async (req, res) => {
     const userId = req.user.id; // Assuming you're using req.user from your authentication middleware
     const user = await User.findById(userId);
 
-    if (user && user.bankDetails && user.bankDetails.accountNumber) {
-      console.log("Bank details found:", user.bankDetails);
-      return res.json({
-        bankDetailsSaved: true,
-        bankDetails: user.bankDetails,
-      });
-    } else {
-      return res.json({ bankDetailsSaved: false });
+    if (user && user.bankDetails) {
+      const { accountNumber, upiId } = user.bankDetails;
+      
+      if (accountNumber || upiId) {
+        console.log("Bank details found:", user.bankDetails);
+        return res.json({
+          bankDetailsSaved: true,
+          bankDetails: user.bankDetails,
+        });
+      }
     }
+    
+    return res.json({ bankDetailsSaved: false });
+    
   } catch (error) {
     console.error("Error checking bank details:", error);
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // Add bank account
 exports.addBankAccount = async (req, res) => {
@@ -82,14 +88,19 @@ exports.addBankAccount = async (req, res) => {
   const userId = req.user.id; // Assuming you have the user ID from the token
 
   try {
-    // Find the user and update their bank details
+    // Find the user by ID
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update or set bank details
-    user.bankDetails = bankDetails; // This will replace the existing details
+    // Update the user's bank details and UPI ID, if provided
+    if (bankDetails.accountNumber) user.bankDetails.accountNumber = bankDetails.accountNumber;
+    if (bankDetails.ifscCode) user.bankDetails.ifscCode = bankDetails.ifscCode;
+    if (bankDetails.accountHolderName) user.bankDetails.accountHolderName = bankDetails.accountHolderName;
+    if (bankDetails.upiId) user.bankDetails.upiId = bankDetails.upiId; // Specifically updating UPI ID
+
+    // Save the updated user
     await user.save();
 
     res.status(200).json({
@@ -101,6 +112,7 @@ exports.addBankAccount = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
 
 exports.getDeposits = async (req, res) => {
   try {
