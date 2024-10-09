@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USDT Price Update Page</title>
+    <style>
+      /* General Styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      header {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        position: relative;
+      }
+
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        margin: auto; /* Ensure the container is centered */
+        gap: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      .price-info {
+        margin-top: 20px;
+      }
+
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main Content -->
+    <div class="container">
+      <!-- Get USDT Price Button -->
+      <button onclick="fetchCurrentUsdtPrice()">Get Current USDT Price</button>
+
+      <!-- Price Info -->
+      <div class="price-info" id="priceInfo" style="display: none">
+        <h2>Current USDT Price</h2>
+        <p><strong>Price:</strong> <span id="currentPrice"></span></p>
+
+        <h2>Update Price</h2>
+        <input type="number" id="newPrice" placeholder="New USDT Price" />
+        <button onclick="updateUsdtPrice()">Update Price</button>
+        <button onclick="history.back()" style="margin-top: 5px">Back</button>
+      </div>
+
+      <p class="error" id="errorMessage" style="display: none"></p>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+      <p>&copy; 2024 Crypto Admin Panel. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // Authentication function
+      async function authenticate() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "admin-login.html"; // Redirect to login if no token
+          return false;
+        }
+        try {
+          const response = await fetch(
+            "https://onexcrypto.xyz/api/verifyAdmin",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const result = await response.json();
+          if (!result.success) {
+            window.location.href = "admin-login.html"; // Redirect if not authenticated
+            return false;
+          }
+          return true;
+        } catch (error) {
+          console.error("Authentication failed:", error);
+          window.location.href = "admin-login.html"; // Redirect if error
+          return false;
+        }
+      }
+
+      // Fetch current USDT price
+      async function fetchCurrentUsdtPrice() {
+        const errorMessage = document.getElementById("errorMessage");
+
+        try {
+          const response = await fetch(
+            `https://onexcrypto.xyz/api/getUsdtPrice`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch USDT price");
+          }
+
+          const data = await response.json();
+          document.getElementById("currentPrice").textContent =
+            data.price.usdtPrice;
+          document.getElementById("priceInfo").style.display = "block";
+          errorMessage.style.display = "none";
+        } catch (error) {
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        }
+      }
+
+      // Update USDT price
+      async function updateUsdtPrice() {
+        const newPrice = document.getElementById("newPrice").value;
+
+        try {
+          const response = await fetch(
+            `https://onexcrypto.xyz/api/admin/updatePrice`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: JSON.stringify({ usdtPrice: parseFloat(newPrice) }),
+            }
+          );
+
+          const data = await response.json();
+          if (response.ok) {
+            alert("USDT price updated successfully!");
+          } else {
+            alert(data.message || "Failed to update price.");
+          }
+        } catch (error) {
+          console.error("Error updating price:", error);
+          alert("Error updating price.");
+        }
+        fetchCurrentUsdtPrice(); // Fetch and display updated price
+      }
+
+      // Ensure authenticate runs first, then fetch the USDT price
+      window.onload = async function () {
+        const isAuthenticated = await authenticate();
+        if (isAuthenticated) {
+          fetchCurrentUsdtPrice(); // Run only if authentication succeeds
+        }
+      };
+    </script>
+  </body>
+</html>

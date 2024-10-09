@@ -1,0 +1,475 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+input:focus{
+    outline: none;
+}
+
+/* index......  */
+.main{
+    width: 350px;
+    height: 100vh;
+    margin: 0 auto;
+    /* background-color: #ffffff; */
+}
+.supp-icon{
+    float: right; margin-right: 20px; font-size: 20px;
+    }
+.one {
+    font-size: 12px;
+}
+
+.col-8 h5 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    color: black;
+}
+
+.logo-img {
+    width: 30px;
+    height: 30px;
+}
+footer{
+    max-width: 375px;
+    margin: auto;
+}
+
+/* Exchange....  */
+.wel-span{
+    font-size: 14px; font-weight: 600;
+  }
+.base{
+    background-color: red;
+    margin-left: 5px;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+}
+  .exc-support{
+    float: right; margin-right: 20px; font-size: 20px;
+  }
+  .bg-war{
+    background-color: rgba(255, 214, 135, 0.5);
+
+    border-radius: 10px;
+  }
+  .table-head{
+background-color: #FFDB58;
+    /* padding: 25px; */
+    border-radius: 10px;
+    width: 90%;
+    margin: auto;
+  }
+  .table-body{
+    width: 95%;
+    margin: auto;
+  }
+  .table-head th{
+    border-bottom: none;
+  }
+  .popup-click{
+border: 0;
+cursor: pointer;
+font-size: 10px;
+font-weight: 500;
+border-radius: 25px;
+
+    
+}
+.popup{
+    /* width: 350px; */
+    background-color: whitesmoke;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(0.1);
+    text-align: center;
+    padding: 0px 30px 30px ;
+    visibility: hidden;
+
+}
+.open-popup{
+    visibility: visible;
+    top: 132%;
+    transform: translate(-50%,-50%) scale(1);
+
+}
+
+.popup h2{
+    font-size: 34px;
+    font-weight: 500;
+    margin: 30px 0px 10px;
+}
+.popup button{
+    width: 90%;
+    margin-top: 50px;
+    padding: 5px 0px;
+    background-color: black;
+    font-size: 20px;
+    border: 0;
+    cursor: pointer;
+    color: whitesmoke;
+    border-radius: 20px;
+}
+@media only screen and (min-width:320px) and (max-width:425px) {
+    .open-popup{
+        visibility: visible;
+    top: 150%;
+    width: 100%;
+    transform: translate(-50%,-50%) scale(1);
+    }
+    
+}
+
+  .button {
+    width: 280px;
+    border-radius: 30px;
+  }
+
+  .depo-icon {
+    font-size: 20px;
+    font-weight: 200;
+  }
+
+  .depo-icon:focus {
+    color: #000 !important;
+  }
+
+  .waz-img {
+    width: 15px;
+    height: 15px;
+    margin-top: 3px;
+    margin-right: 5px;
+}
+.b3b3{
+    color: #b3b3b3;
+    font-size: 13px;
+}
+.mi89{
+    font-size: 14px;
+    font-weight: 500;
+}
+.pice10{
+    font-size: 14px;
+    color: #b3b3b3;
+}
+
+/* mine...  */
+
+/* loginform...  */
+.button-login{
+    width: 225px;
+border-radius: 30px;
+/* filter: blur(1px); */
+background-color: gainsboro;
+border: none;
+color: white;
+}
+
+/* Deposite..... */
+
+
+.depo-heading-pera{
+    color: #b3b3b3;
+    font-size: 14px;
+}
+.trc{
+    width: 140px;
+    height: 35px;
+    background-color: gainsboro;
+    border-radius: 7px;
+    
+}
+.trc:active{
+    border: 2px solid yellow;
+    background-color: white;
+}
+.trc span{
+    font-size: 12px;
+}
+.usdt{
+    width: 140px;
+    height: 35px;
+    background-color: gainsboro;
+    border-radius: 7px;
+}
+.usdt span{
+    font-size: 12px;
+}
+.div-input{
+    background-color: #ddd;
+}
+.div-input span{
+    font-size: 12px;
+    font-weight: 700;
+}
+.depo-input{
+    border: none;
+    width: 230px;
+    background: transparent;
+    font-size: 13px;
+
+}
+
+.button-deposite{
+    width: 300px;
+border-radius: 30px;
+/* filter: blur(1px); */
+background-color: gainsboro;
+border: none;
+color: white;
+font-size: 14px;
+font-weight: 600;
+}
+.depo-pera{
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+/* withdraw...  */
+
+.withdraw-trc{
+    width: 100px;
+    height: 35px;
+    border-radius: 7px;
+    margin-right: 20px;
+
+    
+}
+.withdraw-usdt{
+    width: 100px;
+    height: 35px;
+    border-radius: 7px;
+    border: 1px solid yellow;
+
+}
+
+.set{
+    font-size: 16px;
+}
+
+.sms{
+    font-size: 12px;
+}
+
+.The{
+    font-size: 12px;
+}
+
+/* invite...  */
+.button-invite{
+    width: 100%;
+border-radius: 20px;
+}
+
+/* usdl...  */
+.usdl-button {
+    border: 2px dotted rgb(55, 255, 55);
+    height: 57px;
+    width: 71%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+.button-usdt{
+    width: 90%;
+border-radius: 20px;
+height: 46px;
+background-color: gainsboro;
+border: none;
+color: white;
+}
+
+.add-bank-input1{
+    border: none; padding-left: 40px;
+}
+.add-bank-input2{
+    border: none; padding-left: 60px;
+}
+.add-bank-input3{
+    border: none; padding-left: 20px;
+}
+
+
+
+/* user...  */
+.user {
+    text-align: center;
+}
+
+.user img {
+    border-radius: 100%;
+
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total p {
+    font-size: 12px;
+    font-weight: 500;
+    color: #b3b3b3;
+}
+
+.reward-sec {
+    display: flex;
+    justify-content: space-around;
+    /* background-color: aqua; */
+}
+
+.reward-sec p {
+    font-size: 12px;
+    font-weight: 500;
+    /* color: #b3b3b3; */
+}
+
+.reward-sec strong {
+    color: black;
+
+    font-size: 15px;
+    font-weight: 500;
+}
+.user-main{
+    background-image: linear-gradient(to left, #FFF6D1, #FCEA9C);
+
+}
+.exchange-section1{
+    background-image: linear-gradient(to bottom, #370691, #1a1917);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+}
+.exchange-section2 {
+    background-image: linear-gradient(to right, #FFF6D1, #FCEA9C);
+    padding: 0%;
+    border-radius: 10px;
+}
+
+.beut {
+    background-color: #000;
+    height: 25px;
+    border-radius: 15px;
+    margin-top: 5px;
+    margin-right: -70px;
+
+
+}
+
+.border-input {
+    border-left: 2px solid #000;
+    /* margin-left: 50px; */
+
+}
+
+.beut a {
+    text-decoration: none;
+    color: #fff;
+    padding: 0 10px 5px;
+
+
+}
+
+.total strong {
+    color: black;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.refer-input {
+    display: flex;
+    justify-content: space-between;
+}
+
+.refer-input h5 {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.user-svg1 {
+    margin-right: 5px;
+}
+.user-button{
+    width: 100%;
+    color: #fff;
+    margin: auto;
+    background-color: #370691;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 4px 0px;
+}
+
+.payx img{
+    width: 30px;
+    border-radius: 50%;
+    padding-top: 10px;
+}
+.payx-3{
+    padding-left: 10px;
+}
+.payx-usdt{
+    color: #b3b3b3;
+    font-size: 12px;
+}
+.payx1{
+    font-size: 13px;
+}
+
+.user-withdraw-button{
+background-image: linear-gradient(to right, #FFF6D1, #FCEA9C);
+margin: auto;
+padding: 5px 10px;
+font-size: 11px;
+border-radius: 15px;
+margin-top: 10px;
+margin-left: 30px;
+font-weight: 500;
+}
+.user-detail-button{
+    background-color: #000;
+    margin: auto;
+    padding: 5px 15px;
+    font-size: 11px;
+    border-radius: 15px;
+    margin-top: 10px;
+    margin-left: 30px;
+    font-weight: 500;
+    }
+
+/* Add wallet...  */
+input:focus {
+    outline: none;
+}
+
+.please_f-s{
+    font-size: 11px ;
+    text-align: left;
+}
+
+.font{
+    font-size: 12px;
+}
+.inpt{
+    padding-left: 30px;
+    width: 80%;
+}
+
+/* details...  */
+.reward {
+    margin-right: -65px;
+}

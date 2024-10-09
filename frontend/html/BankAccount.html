@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="assets/img/style.css" />
+    <title>Bank Account</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="container-fluid vh">
+        <div class="p-3 d-flex">
+          <a href="user.html">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#5f6368"
+            >
+              <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z" />
+            </svg>
+          </a>
+          <h5 class="ms-5">Add Bank Account</h5>
+        </div>
+      </div>
+      <div class="container">
+        <div class="pt-5">
+          <div id="loadingMessage" class="alert alert-info">
+            Checking for existing bank details...
+          </div>
+          <div
+            id="bankDetailsMessage"
+            class="alert alert-info"
+            style="display: none"
+          >
+            Bank details are already saved.
+          </div>
+          <div id="bankDetails" style="display: none">
+            <h5>Stored Bank Details</h5>
+            <p>
+              <strong>Account Holder Name:</strong>
+              <span id="storedAccountName"></span>
+            </p>
+            <p>
+              <strong>Account Number:</strong>
+              <span id="storedAccountNumber"></span>
+            </p>
+            <p><strong>IFSC Code:</strong> <span id="storedIfscCode"></span></p>
+            <p><strong>UPI ID:</strong> <span id="storedUpiId"></span></p>
+            <button id="updateButton" class="btn btn-secondary">
+              Update Bank Details
+            </button>
+          </div>
+          <form id="bankAccountForm" style="display: none">
+            <div class="mb-3">
+              <label for="accountName" class="form-label">Account Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="accountName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="accountNumber" class="form-label"
+                >Account Number</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="accountNumber"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ifscCode" class="form-label">IFSC Code</label>
+              <input type="text" class="form-control" id="ifscCode" required />
+            </div>
+            <div class="mb-3">
+              <label for="upiId" class="form-label">UPI ID</label>
+              <input type="text" class="form-control" id="upiId" />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      async function authenticate() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "loginform.html";
+          return false; // Return false if no token
+        }
+        const response = await fetch("https://onexcrypto.xyz/api/authUser", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        if (!result.success) {
+          window.location.href = "loginform.html";
+          return false; // Return false if authentication fails
+        }
+        return true; // Return true if authentication is successful
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        const isAuthenticated = await authenticate(); // Call authenticate first
+        if (!isAuthenticated) {
+          return; // Stop execution if not authenticated
+        }
+
+        const bankDetailsMessage =
+          document.getElementById("bankDetailsMessage");
+        const bankDetails = document.getElementById("bankDetails");
+        const bankAccountForm = document.getElementById("bankAccountForm");
+        const loadingMessage = document.getElementById("loadingMessage");
+        const updateButton = document.getElementById("updateButton");
+        const token = localStorage.getItem("token"); // Retrieve token from localStorage
+
+        // Function to fetch bank details
+        const fetchBankDetails = async () => {
+          try {
+            const response = await fetch(
+              "https://onexcrypto.xyz/api/checkBankDetails",
+              {
+                headers: {
+                  Authorization: "Bearer " + token, // Include token in the request headers
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok: " + response.statusText
+              );
+            }
+
+            const data = await response.json();
+            console.log(data);
+            loadingMessage.style.display = "none"; // Hide the loading message
+
+            if (data.bankDetails && data.bankDetails.accountHolderName) {
+              // If bank details exist, show the stored details and hide the form
+              bankDetailsMessage.style.display = "block";
+              bankDetails.style.display = "block";
+              bankAccountForm.style.display = "none";
+
+              document.getElementById("storedAccountName").textContent =
+                data.bankDetails.accountHolderName;
+              document.getElementById("storedAccountNumber").textContent =
+                data.bankDetails.accountNumber;
+              document.getElementById("storedIfscCode").textContent =
+                data.bankDetails.ifscCode;
+              document.getElementById("storedUpiId").textContent =
+                data.bankDetails.upiId || "N/A"; // Show UPI ID or N/A if not present
+            } else {
+              // If no bank details are found, show the form to add new bank details
+              bankDetailsMessage.style.display = "none";
+              bankDetails.style.display = "none";
+              bankAccountForm.style.display = "block";
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            loadingMessage.textContent =
+              "Error checking bank details: " + error.message;
+          }
+        };
+
+        // Fetch bank details on page load
+        await fetchBankDetails();
+
+        // Handle form submission
+        const handleFormSubmit = async (event) => {
+          event.preventDefault();
+
+          const accountHolderName =
+            document.getElementById("accountName").value;
+          const accountNumber = document.getElementById("accountNumber").value;
+          const ifscCode = document.getElementById("ifscCode").value;
+          const upiId = document.getElementById("upiId").value;
+
+          const data = {
+            bankDetails: {
+              accountHolderName: accountHolderName,
+              accountNumber: accountNumber,
+              ifscCode: ifscCode,
+              upiId: upiId, // Include UPI ID in the submitted data
+            },
+          };
+
+          try {
+            const response = await fetch(
+              "https://onexcrypto.xyz/api/addBankAccount",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok: " + response.statusText
+              );
+            }
+
+            await response.json();
+            alert("Bank account added/updated successfully!");
+            document.getElementById("storedAccountName").textContent =
+              accountHolderName;
+            document.getElementById("storedAccountNumber").textContent =
+              accountNumber;
+            document.getElementById("storedIfscCode").textContent = ifscCode;
+            document.getElementById("storedUpiId").textContent = upiId || "N/A"; // Display UPI ID or N/A
+            bankDetails.style.display = "block"; // Show bank details
+            bankAccountForm.style.display = "none"; // Hide form
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Error adding/updating bank account: " + error.message);
+          }
+        };
+
+        if (bankAccountForm) {
+          bankAccountForm.addEventListener("submit", handleFormSubmit);
+        }
+
+        if (updateButton) {
+          updateButton.addEventListener("click", function () {
+            bankAccountForm.style.display = "block"; // Show the form for updating
+            document.getElementById("accountName").value =
+              document.getElementById("storedAccountName").textContent;
+            document.getElementById("accountNumber").value =
+              document.getElementById("storedAccountNumber").textContent;
+            document.getElementById("ifscCode").value =
+              document.getElementById("storedIfscCode").textContent;
+            document.getElementById("upiId").value =
+              document.getElementById("storedUpiId").textContent;
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

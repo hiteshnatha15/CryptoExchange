@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/img/style.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .main {
+            padding: 30px 0;
+        }
+        .button-invite {
+            background-color: #007bff;
+            color: white;
+        }
+        .button-invite:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .whatsapp-share {
+            margin-top: 20px;
+        }
+        .whatsapp-share a {
+            text-decoration: none;
+            color: #25D366; /* WhatsApp green */
+            font-weight: bold;
+        }
+        .whatsapp-share a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main">
+    <div class="container-fluid">
+        <div class="p-3"><a href="user.html"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/></svg></a></div>
+    </div>
+    <div class="container">
+        <div class="row pb-4">
+            <div class="text-center">
+                <h6 class="fw-bold">Invite friends and make money together</h6>
+                <p style="color: #6c757d; font-size: 12px;">Each accepted order of your subordinates will get you corresponding rewards</p>
+                <!-- <img src="assets/img/invite.jfif" alt="" class="img-fluid mb-3"> -->
+                <br>
+
+                <div class="text-center mt-3">
+                    <button id="inviteButton" type="button" class="btn btn-dark button-invite">Invite friends</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="referralModal" tabindex="-1" aria-labelledby="referralModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="referralModalLabel">Your Referral Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h6>Your Referral Code: <span id="referralCode"></span></h6>
+                <div class="whatsapp-share" style="display: none;">
+                    <a id="whatsappLink" href="#" target="_blank">Share on WhatsApp</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+<script>
+    async function authenticate() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "loginform.html";
+            return false; // Return false if no token
+        }
+        const response = await fetch("https://onexcrypto.xyz/api/authUser", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const result = await response.json();
+        if (!result.success) {
+            window.location.href = "loginform.html";
+            return false; // Return false if authentication fails
+        }
+        return true; // Return true if authentication is successful
+    }
+
+    document.getElementById('inviteButton').addEventListener('click', async () => {
+        const isAuthenticated = await authenticate();
+        if (!isAuthenticated) return; // Stop if not authenticated
+
+        try {
+            const response = await fetch('https://onexcrypto.xyz/api/getReferralCode', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming you're using token-based auth
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('referralCode').textContent = data.referralCode; // Set the referral code
+                
+                // Update WhatsApp share link
+                const shareMessage = `Join me on this platform! Use my referral code: ${data.referralCode}.https://onexcrypto.xyz`;
+                const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMessage)}`;
+                document.getElementById('whatsappLink').href = whatsappUrl;
+                document.querySelector('.whatsapp-share').style.display = 'block'; // Show WhatsApp share link
+                
+                // Show the modal
+                var modal = new bootstrap.Modal(document.getElementById('referralModal'));
+                modal.show();
+            } else {
+                alert('Failed to retrieve referral code.');
+            }
+        } catch (error) {
+            console.error('Error fetching referral code:', error);
+            alert('An error occurred while fetching the referral code.');
+        }
+    });
+
+    // Call authenticate on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+        await authenticate();
+    });
+</script>
+</body>
+</html>

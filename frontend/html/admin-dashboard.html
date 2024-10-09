@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Admin Panel - Home</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <style>
+    /* General Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .logout-btn {
+      background-color: #50d890;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #45c77e;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .grid-item {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .grid-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .grid-item h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .grid-item p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .grid-item a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #50d890;
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .grid-item a:hover {
+      background-color: #45c77e;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      padding-bottom: 15px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        font-size: 18px;
+      }
+
+      .grid-item h2 {
+        font-size: 20px;
+      }
+
+      .grid-item p {
+        font-size: 14px;
+      }
+    }
+  </style>
+  <body>
+    <header>
+      <h1>Crypto Admin Panel</h1>
+      <button class="logout-btn">Logout</button>
+    </header>
+
+    <main>
+      <h1>Welcome to the Admin Dashboard</h1>
+      <p style="text-align: center; margin-bottom: 30px">
+        Manage selling, deposits, and balances easily from the options below.
+      </p>
+
+      <div class="grid">
+        <!-- Selling List -->
+        <div class="grid-item">
+          <h2>Selling List</h2>
+          <p>View all crypto sales and manage user transactions.</p>
+          <a href="admin-selling.html">Go to Selling List</a>
+        </div>
+
+        <!-- Deposit List -->
+        <div class="grid-item">
+          <h2>Deposit List</h2>
+          <p>Manage user deposits and track transactions.</p>
+          <a href="admin-deposit.html">Go to Deposit List</a>
+        </div>
+
+        <!-- Balance Update -->
+        <div class="grid-item">
+          <h2>Balance Update</h2>
+          <p>Update user balances after reviewing transactions.</p>
+          <a href="admin-update-price.html">Go to Balance Update</a>
+        </div>
+
+        <!-- User Details -->
+        <div class="grid-item">
+          <h2>User Details</h2>
+          <p>View and manage user details, including profile information.</p>
+          <a href="admin-user-details.html">Go to User Details</a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Crypto Admin Panel. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // Example logout functionality (you can adjust as needed)
+      async function authenticate() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "admin-login.html";
+          return false; // Return false if no token
+        }
+        const response = await fetch("https://onexcrypto.xyz/api/verifyAdmin", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await response.json();
+        if (!result.success) {
+          window.location.href = "admin-login.html";
+          return false; // Return false if authentication fails
+        }
+        return true; // Return true if authentication is successful
+      }
+      window.onload = authenticate;
+      document
+        .querySelector(".logout-btn")
+        .addEventListener("click", function () {
+          alert("Logging out...");
+          localStorage.clear(); // Clear all data in local storage
+          // Add your logout logic here, such as clearing session or redirecting
+          window.location.href = "admin-login.html"; // Redirect to login page after logout
+        });
+    </script>
+  </body>
+</html>
