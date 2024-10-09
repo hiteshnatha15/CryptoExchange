@@ -5,135 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin User Details</title>
     <style>
-      /* General Styling */
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          font-family: Arial, sans-serif;
-      }
-  
-      body {
-          background-color: #f4f4f4;
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-      }
-  
-      header {
-          background-color: #333;
-          color: white;
-          padding: 20px;
-          text-align: center;
-          position: relative;
-      }
-  
-      main {
-          flex: 1;
-          padding: 20px;
-          max-width: 800px;
-          margin: 0 auto;
-          background: #fff;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-          overflow-x: auto; /* Enables horizontal scrolling */
-      }
-  
-      h1 {
-          text-align: center;
-          margin-bottom: 20px;
-      }
-  
-      table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 20px;
-          min-width: 700px; /* Ensures the table doesn't shrink too much */
-      }
-  
-      th, td {
-          padding: 12px;
-          border: 1px solid #ddd;
-          text-align: left;
-      }
-  
-      th {
-          background-color: #333;
-          color: white;
-      }
-  
-      footer {
-          background-color: #333;
-          color: white;
-          padding: 10px;
-          text-align: center;
-      }
-  
-      .back-btn {
-          padding: 10px 20px;
-          background-color: #50d890;
-          color: white;
-          border: none;
-          border-radius: 50px;
-          cursor: pointer;
-          position: absolute;
-          top: 50%;
-          left: 20px;
-          transform: translateY(-50%);
-          transition: background-color 0.3s, box-shadow 0.3s;
-      }
-  
-      .back-btn:hover {
-          background-color: #45c77e;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      }
-  
-      /* Media Queries for Smaller Screens */
-      @media (max-width: 768px) {
-          main {
-              padding: 10px;
-          }
-  
-          table {
-              font-size: 14px; /* Adjust font size for smaller screens */
-              min-width: 600px; /* Ensure table still fits in smaller width */
-          }
-  
-          th, td {
-              padding: 8px; /* Reduce padding for smaller screens */
-          }
-  
-          h1 {
-              font-size: 18px; /* Adjust header font size for mobile */
-          }
-  
-          .back-btn {
-              padding: 8px 16px;
-              font-size: 14px;
-          }
-      }
-  
-      @media (max-width: 480px) {
-          table {
-              font-size: 12px;
-              min-width: 500px; /* Further reduce table size for very small screens */
-          }
-  
-          th, td {
-              padding: 6px; /* Reduce padding further */
-          }
-  
-          h1 {
-              font-size: 16px;
-          }
-  
-          .back-btn {
-              padding: 6px 12px;
-              font-size: 12px;
-          }
-      }
-  </style>
-  
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background-color: #50d890;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #45c77e;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .update-form input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .update-form button {
+            background-color: #50d890;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .update-form button:hover {
+            background-color: #45c77e;
+        }
+        table td button {
+    padding: 8px 16px;
+    background-color: #50d890; /* Same green color as the back button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+table td button:hover {
+    background-color: #45c77e; /* Darker green on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow on hover */
+}
+    </style>
 </head>
 <body>
     <header>
@@ -155,6 +177,7 @@
                     <th>Processing Balance</th>
                     <th>Commission Balance</th>
                     <th>Created At</th>
+                    <th>Actions</th> <!-- New column for actions -->
                 </tr>
             </thead>
             <tbody>
@@ -166,6 +189,26 @@
     <footer>
         <p>&copy; 2024 Crypto Admin Panel. All rights reserved.</p>
     </footer>
+
+    <!-- Modal for updating balances -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update User Balance</h2>
+            <form class="update-form" id="updateForm">
+                <input type="hidden" id="userId" />
+                <label for="trc20">TRC-20 Balance:</label>
+                <input type="number" id="trc20" step="any" required />
+                <label for="bep20">BEP-20 Balance:</label>
+                <input type="number" id="bep20" step="any" required />
+                <label for="processing">Processing Balance:</label>
+                <input type="number" id="processing" step="any" required />
+                <label for="commission">Commission Balance:</label>
+                <input type="number" id="commission" step="any" required />
+                <button type="submit" id="updateButton">Update Balance</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Fetch all registered users
@@ -182,8 +225,6 @@
                 }
                 const data = await response.json();
                 const users = data.users;
-
-                console.log("Users", users);
                 displayUserDetails(users); // Pass the user data to display
             } catch (error) {
                 console.error("Error fetching user details:", error);
@@ -205,9 +246,64 @@
                     <td>${user.balances.processing || 0}</td>
                     <td>${user.balances.commission || 0}</td>
                     <td>${new Date(user.createdAt).toLocaleString()}</td>
+                    <td><button onclick="openModal('${user._id}', ${user.balances.trc20}, ${user.balances.bep20}, ${user.balances.processing}, ${user.balances.commission})">Update</button></td>
                 `;
             });
         }
+
+        // Open modal with user data
+        function openModal(userId, trc20, bep20, processing, commission) {
+            document.getElementById("userId").value = userId;
+            document.getElementById("trc20").value = trc20;
+            document.getElementById("bep20").value = bep20;
+            document.getElementById("processing").value = processing;
+            document.getElementById("commission").value = commission;
+            document.getElementById("updateModal").style.display = "block";
+        }
+
+        // Close modal
+        document.querySelector(".close").onclick = function() {
+            document.getElementById("updateModal").style.display = "none";
+        };
+
+        // Submit form and update user balance
+        document.getElementById("updateForm").onsubmit = async function(event) {
+            event.preventDefault();
+            const userId = document.getElementById("userId").value;
+            const trc20 = document.getElementById("trc20").value;
+            const bep20 = document.getElementById("bep20").value;
+            const processing = document.getElementById("processing").value;
+            const commission = document.getElementById("commission").value;
+
+            try {
+                const response = await fetch("https://onexcrypto.xyz/api/admin/updateBalances", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        trc20,
+                        bep20,
+                        processing,
+                        commission
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error updating user balance");
+                }
+
+                alert("User balance updated successfully");
+                document.getElementById("updateModal").style.display = "none"; // Close modal on success
+                window.location.reload();
+                // fetchAllUsers(); // Refresh user list
+            } catch (error) {
+                console.error("Error updating user balance:", error);
+                alert("Failed to update user balance");
+            }
+        };
 
         // Authenticate before loading data
         async function authenticateAndFetchDetails() {

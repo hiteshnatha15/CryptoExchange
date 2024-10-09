@@ -153,6 +153,7 @@
           </div>
           <div class="d-flex justify-content-between">
             <span>Deposit Address:</span>
+            
           </div>
           <div class="d-flex justify-content-between">
             <span
@@ -214,19 +215,30 @@
           const qrCodeImageElement = document.getElementById("qrCodeImage");
           console.log("Deposit:", deposit);
           qrCodeImageElement.src = deposit.qrCodeUrl || "";
-          const depositAddressElement =
-            document.getElementById("deposit-address");
-          depositAddressElement.textContent = deposit.address || "N/A";
+const depositAddressElement = document.getElementById("deposit-address");
+depositAddressElement.innerHTML = `
+  <span style="font-size: 0.7rem;">${deposit.address || "N/A"}</span>
+  <button class="btn btn-sm btn-copy" onclick="copyDepositAddress()" style="padding: 0; margin-left: 5px;">
+   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
+</svg>
+
+  </button>
+`;
+
+
           const depositAmountElement =
             document.getElementById("deposit-amount");
-          depositAmountElement.textContent = deposit.amount || "N/A";
+          depositAmountElement.textContent = '$'+deposit.amount || "N/A";
           const depositIdElement = document.getElementById("deposit-id");
           depositIdElement.textContent = deposit.id || "N/A";
-          const depositNetworkElements =
-            document.getElementsByClassName("deposit-network");
-          for (let element of depositNetworkElements) {
-            element.textContent = deposit.network || "N/A";
-          }
+          const depositNetworkElements = document.getElementsByClassName("deposit-network");
+const networkName = deposit.network === "BSC" ? "BEP20" : deposit.network === "TRX" ? "TRC20" : "N/A";
+
+for (let element of depositNetworkElements) {
+    element.textContent = networkName;
+}
+
           const depositCreatedAtElement =
             document.getElementById("deposit-createdAt");
           if (deposit.createdAt) {
@@ -278,6 +290,17 @@
           alert("Transaction ID or user token is missing.");
         }
       }
+      function copyDepositAddress() {
+    const depositAddress = deposit.address || "N/A";
+    navigator.clipboard.writeText(depositAddress)
+        .then(() => {
+            // alert("Deposit address copied to clipboard!");
+        })
+        .catch(err => {
+            console.error("Failed to copy: ", err);
+            // alert("Failed to copy the deposit address.");
+        });
+}
 
       async function cancelDeposit() {
         // Implement the logic to cancel the deposit
@@ -299,11 +322,11 @@
             );
             const data = await response.json();
             if (data.success) {
-              alert("Deposit cancelled successfully.");
+              // alert("Deposit cancelled successfully.");
               localStorage.removeItem("deposit");
               window.location.href = "user.html";
             } else {
-              alert("Failed to cancel deposit.");
+              // alert("Failed to cancel deposit.");
               localStorage.removeItem("deposit");
               window.location.href = "user.html";
             }

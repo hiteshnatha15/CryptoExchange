@@ -72,7 +72,7 @@ footer {
       <div class="container-fluid">
         <div class="container">
           <a class="navbar-brand" href="#">
-            <img src="assets/img/9391714.png" alt="" class="d-inline-block align-text-top rounded-circle logo-img">
+            <img src="assets/img/20241003_152028.png" alt="" class="d-inline-block align-text-top rounded-circle logo-img">
             <span class="wel-span" >Welcome to OneXCrypto</span>
           </a>
           <a href="#" class="exc-support"><img src="assets/img/support_agent_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png" alt="" style="width: 30px;"></a>
@@ -89,11 +89,6 @@ footer {
               height="100px"
               style="border-radius: 10px;">
           </div>
-          <div class="carousel-item">
-            <img src="assets/img/20241002_193345.jpg" class="d-block " alt="..." height="100px"
-            style="border-radius: 10px;">
-          </div>
-
         </div>
 
       </div>
@@ -102,7 +97,7 @@ footer {
     <div class="container ">
       <div class="d-flex justify-content-between flex-column">
         <div class="pb-4">
-          <h6>Platform Price</h6>
+          <h6 style="padding-left: 10px;">Platform Price</h6>
           <div class="bg-war text-center m-2 pt-3" id="refreshable-content">
             <span>Automatic refresh after <span id="countdown" class="text-warning">60</span></span>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" class="ms-5 refresh-icon" width="20px" fill="#5f6368" onclick="getUsdtprice()">
@@ -110,7 +105,7 @@ footer {
             </svg><br>
             <div class="d-flex justify-content-center align-items-center">
               <b class="fs-2 usdt-price"></b>
-                <span class="base ms-2 px-1">Base</span>
+                <span class="base ms-2 px-1" style="border-radius: 5px; font-size:10px; background-color:red">Base</span>
             </div>
             <span>1USDT= &#8377;<span class="usdt-price"></span></span>
             <br>
@@ -122,15 +117,15 @@ footer {
             <table class="table mt-2 table-body">               
                 <tbody class="p-2 bg-white">
                     <tr>
-                        <td class="border-end">&#8377; 500 - &#8377; 1000</td>
+                        <td class="border-end">$500 - $1000</td>
                         <td>&#8377;<span class="usdt-price"></span>+1</td>
                     </tr>
                     <tr>
-                      <td class="border-end">&#8377; 1001 - &#8377; 2000</td>
+                      <td class="border-end">$1001 - $2000</td>
                       <td>&#8377;<span class="usdt-price"></span>+2</td>
                     </tr>
                     <tr>
-                      <td class="border-end">< &#8377;2001</td>
+                      <td class="border-end">< $2001</td>
                       <td>&#8377;<span class="usdt-price"></span>+3</td>
                     </tr>
                     <tr>
@@ -150,9 +145,9 @@ footer {
               </div>
               <div class="modal-body">
                 In order to help users maximize their profits in the shortest possible time, we will launch a tiered exchange
-                price discount policy. For example: When you sell 1075.27 USDT to AngelX, and it qualifies for the tiered
-                price discount policy. Based on the calculation formula of 1075.27 X (93 + 0.25), you will receive
-                100268.92 in funds. In comparison, you have gained an additional profit of 2268.81. This preferential policy
+                price discount policy. For example: When you sell $1075.27 USDT to OneXCrypto, and it qualifies for the tiered
+                price discount policy. Based on the calculation formula of 1075.27 X (93 + 2), you will receive
+                Rs. 100268.92 in funds. In comparison, you have gained an additional profit of 2268.81. This preferential policy
                 allows you to achieve higher returns in your transactions.
               </div>
               <div class="modal-footer">
@@ -168,7 +163,7 @@ footer {
           <a href="usdtButton.html" id="sellButton" type="button" class="btn btn-dark button mb-3" style="display: none;">Sell USDT</a>
           </div>
           
-          <span class="text-danger ">First time login will register new account for you</span>
+          <span class="text-danger" id="toshow">First time login will register new account for you</span>
           <div class="row pt-3" >
             <div class="d-flex justify-content-evenly">
             <div class="col-4 ">
@@ -209,7 +204,7 @@ footer {
               </a>
             </div>
             <div class="mt-2">
-                <p class="mb-1">Avg: <span class=" wazirx-price" style="font-size: 16px;">Loading...</span></p>
+                <p class="mb-1">Avg: <span class=" wazirx-price" style="font-size: 12px;">Loading...</span></p>
                 <p class="mb-1">Low: <span class=" wazirx-low" style="font-size: 12px;">Loading...</span></p>
                 <p class="mb-0">High: <span class=" wazirx-high" style="font-size: 12px;">Loading...</span></p>
             </div>
@@ -224,7 +219,7 @@ footer {
               </a>
             </div>
             <div class="mt-2">
-              <p class="mb-1">Avg: <span class=" binance-price" style="font-size: 16px;">Loading...</span></p>
+              <p class="mb-1">Avg: <span class=" binance-price" style="font-size: 12px;">Loading...</span></p>
               <p class="mb-1">Low: <span class=" binance-low" style="font-size: 12px;">Loading...</span></p>
               <p class="mb-0">High: <span class=" binance-high" style="font-size: 12px;">Loading...</span></p>
             </div>
@@ -420,9 +415,11 @@ footer {
         if (isLoggedIn === "true") {
           document.getElementById("sellButton").style.display = "block";
           document.getElementById("loginButton").style.display = "none";
+          document.getElementById("toshow").style.display = "none"; // Hide the message when logged in
         } else {
           document.getElementById("loginButton").style.display = "block";
           document.getElementById("sellButton").style.display = "none";
+          document.getElementById("toshow").style.display = "block"; // Show the message when not logged in
         }
       }
     

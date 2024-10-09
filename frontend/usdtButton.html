@@ -302,14 +302,20 @@ svg {
                     <div class="col-12 d-flex justify-content-between p-2" style="flex-direction: row;">
                         <div><a href="exchange.html"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/></svg></a></div>
                         <div class="fw-bold fs-6">Exchange</div>
-                        <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg></div>
+                        <div>
+                            <a href="ExchangeHistory.html" style="text-decoration: none; display: inline-block;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368">
+                                    <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="container-fluid bg-dark text-light">
-            <div class="row">
+        <!-- <div class="container-fluid text-light"> -->
+            <!-- <div class="row">
                 <div class="d-flex justify-content-between" style="flex-direction: row;">
                     <div><img src="assets/img/ada.png" alt="" class="pt-2" width="30px"></div>
                     <div>
@@ -318,16 +324,16 @@ svg {
                     </div>
                     <div><i class="fa-solid fa-angle-right mt-2 text-white me-2 p-2"></i></div>
                 </div>
-            </div>
-        </div>
+            </div> -->
+        <!-- </div> -->
 
         <div class="container-fluid">
             <div class="container">
                 <div class="row pb-4">
                     <div id="bankDetailsContainer" class="bank-details"></div>
                     <div id="addBankAccountButton">
-                        <a href="BankAccount.html" type="button" class="usdl-button" style="font-size: 12px;">
-                            Add or Update Bank Account
+                        <a href="BankAccount.html" type="button" class="usdl-button" style="font-size: 10px;">
+                            Add or Update Payment Details
                         </a>
                     </div>
                     <!-- Network Selection -->
@@ -373,15 +379,15 @@ svg {
                     <table class="table mt-2">
                         <tbody class="p-2">
                             <tr>
-                                <td class="border-end">&#8377; 500 - &#8377; 1000</td>
+                                <td class="border-end">$500 - $1000</td>
                                 <td>&#8377;<span class="usdt-price"></span>+1</td>
                             </tr>
                             <tr>
-                              <td class="border-end">&#8377; 1001 - &#8377; 2000</td>
+                              <td class="border-end">$1001 - $2000</td>
                               <td>&#8377;<span class="usdt-price"></span>+2</td>
                             </tr>
                             <tr>
-                              <td class="border-end">< &#8377;2001</td>
+                              <td class="border-end">< $2001</td>
                               <td>&#8377;<span class="usdt-price"></span>+3</td>
                             </tr>
                         </tbody>
@@ -522,6 +528,7 @@ svg {
                         <p>Account Name: ${data.userDetails.bankDetails.accountHolderName}</p>
                         <p>Account Number: ${data.userDetails.bankDetails.accountNumber}</p>
                         <p>IFSC Code: ${data.userDetails.bankDetails.ifscCode}</p>
+                        <p>Upi ID: ${data.userDetails.bankDetails.upiId}</p>
                     `;
                 } else {
                     addBankAccountButton.style.display = 'block';
@@ -550,11 +557,11 @@ svg {
                         amountInput.classList.add('is-invalid');
                     } else {
                         let amountReceived = (enteredAmount * usdtPrice).toFixed(2);
-                        if (enteredAmount * usdtPrice >= 500 && enteredAmount * usdtPrice <= 1000) {
+                        if (enteredAmount  >= 500 && enteredAmount  <= 1000) {
                             amountReceived = (enteredAmount * (usdtPrice + 1)).toFixed(2);
-                        } else if (enteredAmount * usdtPrice >= 1001 && enteredAmount * usdtPrice <= 2000) {
+                        } else if (enteredAmount  >= 1001 && enteredAmount  <= 2000) {
                             amountReceived = (enteredAmount * (usdtPrice + 2)).toFixed(2);
-                        } else if (enteredAmount * usdtPrice > 2000) {
+                        } else if (enteredAmount > 2000) {
                             amountReceived = (enteredAmount * (usdtPrice + 3)).toFixed(2);
                         }
                         receivedAmount.innerText = `You will receive: ₹${amountReceived}`;

@@ -357,6 +357,7 @@
             accountHolderName: "N/A",
             accountNumber: "N/A",
             ifscCode: "N/A",
+            upiId:"N/A"
           };
 
           const userDetailsDiv = document.getElementById("userDetails");
@@ -376,6 +377,7 @@
                 bankDetails.accountNumber
               }</p>
               <p><strong>IFSC Code:</strong> ${bankDetails.ifscCode}</p>
+              <p><strong>Upi ID:</strong> ${bankDetails.upiId}</p>
             `;
 
           openModal();

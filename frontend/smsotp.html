@@ -20,6 +20,19 @@
     <link rel="stylesheet" href="assets/img/style.css" />
 </head>
 <body>
+    <style>
+      .button-login{
+        background-color: black;
+      }
+      .button-login:hover{
+        background-color: black;
+      }
+      .form-control:focus{
+        outline: none; /* Remove default outline */
+  border-color: transparent; /* Remove blue border */
+  box-shadow: none; /* Remove any shadow effects */
+      }
+      </style>
     <div class="main" style="border: 5px solid black">
         <div class="container pb-5 mt-2 vh">
             <form id="otpForm" action="javascript:void(0);">
@@ -36,6 +49,7 @@
                     <input
                       type="text"
                       id="otpInput"
+                      style="background-color: white;"
                       class="form-control bg-light border-0"
                       placeholder="Enter OTP"
                       aria-label="OTP"

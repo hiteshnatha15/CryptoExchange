@@ -52,7 +52,7 @@
           <div id="bankDetails" style="display: none">
             <h5>Stored Bank Details</h5>
             <p>
-              <strong>Account Name:</strong>
+              <strong>Account Holder Name:</strong>
               <span id="storedAccountName"></span>
             </p>
             <p>
@@ -60,6 +60,7 @@
               <span id="storedAccountNumber"></span>
             </p>
             <p><strong>IFSC Code:</strong> <span id="storedIfscCode"></span></p>
+            <p><strong>UPI ID:</strong> <span id="storedUpiId"></span></p>
             <button id="updateButton" class="btn btn-secondary">
               Update Bank Details
             </button>
@@ -88,6 +89,10 @@
             <div class="mb-3">
               <label for="ifscCode" class="form-label">IFSC Code</label>
               <input type="text" class="form-control" id="ifscCode" required />
+            </div>
+            <div class="mb-3">
+              <label for="upiId" class="form-label">UPI ID</label>
+              <input type="text" class="form-control" id="upiId" />
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
@@ -170,6 +175,8 @@
                 data.bankDetails.accountNumber;
               document.getElementById("storedIfscCode").textContent =
                 data.bankDetails.ifscCode;
+              document.getElementById("storedUpiId").textContent =
+                data.bankDetails.upiId || "N/A"; // Show UPI ID or N/A if not present
             } else {
               // If no bank details are found, show the form to add new bank details
               bankDetailsMessage.style.display = "none";
@@ -194,12 +201,14 @@
             document.getElementById("accountName").value;
           const accountNumber = document.getElementById("accountNumber").value;
           const ifscCode = document.getElementById("ifscCode").value;
+          const upiId = document.getElementById("upiId").value;
 
           const data = {
             bankDetails: {
               accountHolderName: accountHolderName,
               accountNumber: accountNumber,
               ifscCode: ifscCode,
+              upiId: upiId, // Include UPI ID in the submitted data
             },
           };
 
@@ -229,6 +238,7 @@
             document.getElementById("storedAccountNumber").textContent =
               accountNumber;
             document.getElementById("storedIfscCode").textContent = ifscCode;
+            document.getElementById("storedUpiId").textContent = upiId || "N/A"; // Display UPI ID or N/A
             bankDetails.style.display = "block"; // Show bank details
             bankAccountForm.style.display = "none"; // Hide form
           } catch (error) {
@@ -250,6 +260,8 @@
               document.getElementById("storedAccountNumber").textContent;
             document.getElementById("ifscCode").value =
               document.getElementById("storedIfscCode").textContent;
+            document.getElementById("upiId").value =
+              document.getElementById("storedUpiId").textContent;
           });
         }
       });
